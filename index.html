@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Hitoishi (হিতৈষী) - বাংলাদেশের প্রিমিয়াম রক্তদান নেটওয়ার্ক।">
+    <meta name="theme-color" content="#dc2626">
+    <title>Hitoishi (হিতৈষী) | রক্তদান নেটওয়ার্ক</title>
+
+    <!-- SEO & Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23dc2626'><path d='M12 21.5c-3.6 0-6.5-2.9-6.5-6.5 0-4.5 6.5-12.5 6.5-12.5s6.5 8 6.5 12.5c0 3.6-2.9 6.5-6.5 6.5z'/></svg>">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <style>
+        body { font-family: 'Hind Siliguri', 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        /* Blood Drop Loading Animation */
+        .loader-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s; }
+        .blood-drop { position: relative; width: 40px; height: 40px; background: #dc2626; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); animation: pulse 1.5s infinite; }
+        .blood-drop::after { content: ''; position: absolute; top: 10px; left: 10px; width: 10px; height: 10px; background: rgba(255,255,255,0.5); border-radius: 50%; }
+        @keyframes pulse { 0% { transform: rotate(-45deg) scale(0.8); opacity: 0.8; } 50% { transform: rotate(-45deg) scale(1.1); opacity: 1; } 100% { transform: rotate(-45deg) scale(0.8); opacity: 0.8; } }
+        
+        /* Page Transitions */
+        .page-section { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .page-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #dc2626; border-radius: 10px; }
+
+        /* Mobile Menu Transitions */
+        .menu-hidden { transform: translateX(100%); }
+        .menu-visible { transform: translateX(0); box-shadow: -5px 0 15px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased flex flex-col min-h-screen">
+
+    <!-- Loading Screen -->
+    <div id="loader" class="loader-overlay">
+        <div class="blood-drop mb-6"></div>
+        <h2 class="text-xl font-bold text-red-600 tracking-wide">হিতৈষী</h2>
+        <p class="text-sm text-gray-500 mt-2">অপেক্ষা করুন...</p>
+    </div>
+
+    <!-- Navigation Bar -->
+    <header class="bg-white shadow-sm sticky top-0 z-40 border-b border-gray-100">
+        <div class="container mx-auto px-4 lg:px-8 py-4 flex justify-between items-center max-w-7xl">
+            <!-- Logo -->
+            <a href="#home" class="flex items-center gap-2 group text-decoration-none">
+                <i class="fa-solid fa-droplet text-red-600 text-2xl group-hover:scale-110 transition-transform"></i>
+                <span class="text-2xl font-bold text-gray-900 tracking-tight">হিতৈষী</span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <nav class="hidden md:flex items-center gap-6 font-medium text-gray-600">
+                <a href="#home" class="hover:text-red-600 transition">হোম</a>
+                <a href="#about" class="hover:text-red-600 transition">আমাদের সম্পর্কে</a>
+                <a href="#faq" class="hover:text-red-600 transition">সাধারণ প্রশ্ন (FAQ)</a>
+                
+                <div id="desktop-auth-buttons" class="flex items-center gap-3 border-l pl-6 border-gray-200">
+                    <a href="#login" class="text-gray-700 hover:text-red-600 transition">লগইন</a>
+                    <a href="#register" class="bg-red-600 text-white px-5 py-2 rounded-full hover:bg-red-700 shadow-md transition">ডোনার হোন</a>
+                </div>
+                
+                <div id="desktop-user-menu" class="hidden flex items-center gap-3 border-l pl-6 border-gray-200">
+                    <a href="#dashboard" class="flex items-center gap-2 text-gray-700 hover:text-red-600">
+                        <img id="nav-profile-pic" src="" class="w-8 h-8 rounded-full border border-gray-300 object-cover" alt="Profile">
+                        <span id="nav-user-name" class="font-bold"></span>
+                    </a>
+                    <button onclick="logout()" class="text-sm text-red-600 hover:underline"><i class="fa-solid fa-sign-out-alt"></i></button>
+                </div>
+            </nav>
+
+            <!-- Mobile Menu Toggle -->
+            <button onclick="toggleMenu()" class="md:hidden text-gray-700 hover:text-red-600 text-2xl">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu (Off-Canvas Right) -->
+    <div id="menu-backdrop" class="fixed inset-0 bg-black/40 z-40 hidden opacity-0 transition-opacity duration-300" onclick="toggleMenu()"></div>
+    <div id="mobile-menu" class="fixed top-0 right-0 h-full w-72 bg-white z-50 menu-hidden transition-transform duration-300 flex flex-col">
+        <div class="p-5 border-b flex justify-between items-center bg-gray-50">
+            <span class="font-bold text-lg text-red-600"><i class="fa-solid fa-droplet mr-2"></i>মেনু</span>
+            <button onclick="toggleMenu()" class="text-gray-500 hover:text-red-600 text-xl"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="flex-1 overflow-y-auto py-4 px-5 flex flex-col gap-4 text-lg text-gray-700">
+            <a href="#home" onclick="toggleMenu()" class="border-b pb-2"><i class="fa-solid fa-home w-6 text-gray-400"></i> হোম</a>
+            <a href="#about" onclick="toggleMenu()" class="border-b pb-2"><i class="fa-solid fa-info-circle w-6 text-gray-400"></i> আমাদের সম্পর্কে</a>
+            <a href="#faq" onclick="toggleMenu()" class="border-b pb-2"><i class="fa-solid fa-question-circle w-6 text-gray-400"></i> সাধারণ প্রশ্ন</a>
+            
+            <div id="mobile-auth-buttons" class="mt-4 flex flex-col gap-3">
+                <a href="#login" onclick="toggleMenu()" class="text-center py-2 border border-gray-300 rounded-lg text-gray-700 font-medium">লগইন করুন</a>
+                <a href="#register" onclick="toggleMenu()" class="text-center py-2 bg-red-600 text-white rounded-lg font-medium shadow-md">নতুন ডোনার হোন</a>
+            </div>
+
+            <div id="mobile-user-menu" class="hidden mt-4 flex flex-col gap-3">
+                <a href="#dashboard" onclick="toggleMenu()" class="flex items-center gap-3 p-3 bg-red-50 rounded-lg border border-red-100">
+                    <i class="fa-solid fa-user-circle text-red-600 text-2xl"></i>
+                    <span class="font-bold text-red-800">আমার ড্যাশবোর্ড</span>
+                </a>
+                <button onclick="logout(); toggleMenu()" class="text-left text-red-600 font-medium py-2"><i class="fa-solid fa-sign-out-alt w-6"></i> লগআউট</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 container mx-auto px-4 lg:px-8 py-8 max-w-7xl">
+        
+        <!-- HOME / SEARCH PAGE -->
+        <section id="home" class="page-section active">
+            <!-- Hero -->
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <h1 class="text-3xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">রক্ত দিন, <span class="text-red-600">জীবন বাঁচান</span></h1>
+                <p class="text-gray-600 text-lg">বাংলাদেশের যেকোনো প্রান্তে আপনার প্রয়োজনীয় রক্তের গ্রুপের ডোনার খুঁজে বের করুন মুহূর্তেই।</p>
+            </div>
+
+            <!-- Search Card -->
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.05)] border border-gray-100 max-w-4xl mx-auto relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-full -z-10 opacity-50"></div>
+                <h2 class="text-xl font-bold mb-6 border-l-4 border-red-600 pl-3">ডোনার খুঁজুন</h2>
+                
+                <form id="searchForm" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">রক্তের গ্রুপ</label>
+                        <select id="searchBloodGroup" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 bg-white" required>
+                            <option value="">নির্বাচন করুন</option>
+                            <option value="A+">A+</option><option value="A-">A-</option>
+                            <option value="B+">B+</option><option value="B-">B-</option>
+                            <option value="O+">O+</option><option value="O-">O-</option>
+                            <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">বিভাগ</label>
+                        <select id="searchDivision" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 bg-white" required>
+                            <option value="">নির্বাচন করুন</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">জেলা</label>
+                        <select id="searchDistrict" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 bg-white" required disabled>
+                            <option value="">আগে বিভাগ নির্বাচন করুন</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-3">
+                        <button type="submit" class="w-full bg-red-600 text-white font-bold py-3.5 rounded-lg shadow-md hover:bg-red-700 transition flex justify-center items-center gap-2">
+                            <i class="fa-solid fa-magnifying-glass"></i> ডোনার খুঁজুন
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Search Results Area -->
+            <div id="searchResultsArea" class="mt-12 hidden">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">অনুসন্ধানের ফলাফল <span id="resultCount" class="text-sm bg-gray-200 text-gray-700 py-1 px-3 rounded-full ml-2">0</span></h3>
+                <div id="resultsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Results injected here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- DONOR DETAILS PAGE (MODAL OR SEPARATE PAGE) -->
+        <section id="donor-profile" class="page-section">
+            <button onclick="window.history.back()" class="mb-5 text-gray-500 hover:text-red-600 font-medium"><i class="fa-solid fa-arrow-left mr-2"></i>ফিরে যান</button>
+            <div id="profileContent" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 max-w-4xl mx-auto">
+                <!-- Content injected via JS -->
+            </div>
+        </section>
+
+        <!-- REGISTER PAGE -->
+        <section id="register" class="page-section">
+            <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="bg-red-50 p-6 border-b border-red-100">
+                    <h2 class="text-2xl font-bold text-red-800 text-center"><i class="fa-solid fa-heart-circle-plus mr-2"></i>নতুন ডোনার অ্যাকাউন্ট</h2>
+                    <p class="text-center text-sm text-red-600 mt-1">দয়া করে সঠিক তথ্য দিন। আপনার তথ্য ওয়েবসাইট ব্যবহারকারীদের কাছে উন্মুক্ত (Public) থাকবে।</p>
+                </div>
+                
+                <form id="regForm" class="p-6 md:p-8 space-y-6">
+                    <!-- Profile Picture -->
+                    <div class="flex flex-col items-center mb-6">
+                        <div class="w-24 h-24 rounded-full border-4 border-gray-200 overflow-hidden bg-gray-50 flex justify-center items-center relative mb-3">
+                            <img id="imgPreview" src="" class="w-full h-full object-cover hidden">
+                            <i id="imgIcon" class="fa-solid fa-camera text-3xl text-gray-300"></i>
+                        </div>
+                        <label class="cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm py-2 px-4 rounded-full transition">
+                            ছবি আপলোড করুন (বাধ্যতামূলক)
+                            <input type="file" id="regPic" accept="image/*" class="hidden" required onchange="previewImage(this)">
+                        </label>
+                        <input type="hidden" id="regPicBase64">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- Basic Info -->
+                        <div><label class="block text-sm font-medium mb-1">পূর্ণ নাম *</label><input type="text" id="regName" class="w-full p-3 border rounded-lg" required></div>
+                        <div><label class="block text-sm font-medium mb-1">ইমেইল *</label><input type="email" id="regEmail" class="w-full p-3 border rounded-lg" required></div>
+                        <div><label class="block text-sm font-medium mb-1">পাসওয়ার্ড *</label><input type="password" id="regPassword" class="w-full p-3 border rounded-lg" required minlength="6"></div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">রক্তের গ্রুপ *</label>
+                            <select id="regBlood" class="w-full p-3 border rounded-lg" required>
+                                <option value="">নির্বাচন করুন</option>
+                                <option value="A+">A+</option><option value="A-">A-</option><option value="B+">B+</option><option value="B-">B-</option>
+                                <option value="O+">O+</option><option value="O-">O-</option><option value="AB+">AB+</option><option value="AB-">AB-</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">লিঙ্গ *</label>
+                            <select id="regGender" class="w-full p-3 border rounded-lg" required>
+                                <option value="">নির্বাচন করুন</option>
+                                <option value="Male">পুরুষ</option><option value="Female">মহিলা</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Contact Info -->
+                        <div><label class="block text-sm font-medium mb-1">মোবাইল নাম্বার ১ *</label><input type="text" id="regPhone1" class="w-full p-3 border rounded-lg bg-gray-50" value="+880" required></div>
+                        <div><label class="block text-sm font-medium mb-1">মোবাইল নাম্বার ২ (ঐচ্ছিক)</label><input type="text" id="regPhone2" class="w-full p-3 border rounded-lg bg-gray-50" value="+880"></div>
+                        
+                        <!-- Address -->
+                        <div><label class="block text-sm font-medium mb-1">বিভাগ *</label><select id="regDivision" class="w-full p-3 border rounded-lg" required></select></div>
+                        <div><label class="block text-sm font-medium mb-1">জেলা *</label><select id="regDistrict" class="w-full p-3 border rounded-lg disabled:bg-gray-100" required disabled></select></div>
+                        <div class="md:col-span-2"><label class="block text-sm font-medium mb-1">বিস্তারিত ঠিকানা *</label><textarea id="regAddress" rows="2" class="w-full p-3 border rounded-lg" placeholder="আপনার এলাকার নাম, রাস্তা বা ল্যান্ডমার্ক লিখুন" required></textarea></div>
+                        
+                        <!-- Medical Info -->
+                        <div class="md:col-span-2 bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                            <p class="font-bold text-yellow-800 mb-3 text-sm"><i class="fa-solid fa-stethoscope mr-1"></i> স্বাস্থ্য সম্পর্কিত তথ্য (সঠিক উত্তর দিন)</p>
+                            <div class="mb-3">
+                                <label class="block text-sm mb-1">আপনি কি নিয়মিত ধূমপান বা মদ্যপান করেন?</label>
+                                <div class="flex gap-4">
+                                    <label><input type="radio" name="regSmoker" value="Yes" required> হ্যাঁ</label>
+                                    <label><input type="radio" name="regSmoker" value="No"> না</label>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm mb-1 text-red-800 font-medium">আপনার কি এমন কোনো বড় রোগ আছে যা রক্তদানে বাধা হতে পারে? (যেমন: হেপাটাইটিস, ক্যান্সার, এইডস, অ্যাজমা ইত্যাদি)</label>
+                                <div class="flex gap-4">
+                                    <label><input type="radio" name="regDisease" value="Yes" required> হ্যাঁ</label>
+                                    <label><input type="radio" name="regDisease" value="No"> না</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Terms -->
+                        <div class="md:col-span-2">
+                            <label class="flex items-start gap-2 text-sm text-gray-600">
+                                <input type="checkbox" required class="mt-1">
+                                <span>আমি <a href="#terms" class="text-red-600 underline">শর্তাবলী</a> ও <a href="#privacy" class="text-red-600 underline">প্রাইভেসি পলিসি</a> মেনে নিচ্ছি এবং স্বীকার করছি যে আমার দেওয়া তথ্য ওয়েবসাইটে পাবলিক করা হবে।</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-red-600 text-white font-bold py-3.5 rounded-lg shadow-md hover:bg-red-700 transition">অ্যাকাউন্ট তৈরি করুন</button>
+                </form>
+
+                <!-- OTP Section (Hidden initially) -->
+                <div id="otpSection" class="p-8 hidden text-center">
+                    <i class="fa-solid fa-envelope-open-text text-5xl text-gray-300 mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">ইমেইল ভেরিফিকেশন</h3>
+                    <p class="text-sm text-gray-500 mb-6">আপনার ইমেইলে একটি ৬-ডিজিটের কোড পাঠানো হয়েছে।</p>
+                    <input type="text" id="otpInput" class="w-full max-w-xs mx-auto text-center text-2xl tracking-[0.5em] p-3 border-2 border-red-200 rounded-lg focus:border-red-600 mb-4" maxlength="6" placeholder="------">
+                    <button onclick="verifyOTP()" class="w-full max-w-xs bg-red-600 text-white font-bold py-3 rounded-lg shadow-md hover:bg-red-700 transition">ভেরিফাই করুন</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- LOGIN PAGE -->
+        <section id="login" class="page-section">
+            <div class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fa-solid fa-user-lock"></i></div>
+                    <h2 class="text-2xl font-bold">লগইন করুন</h2>
+                </div>
+                <form id="loginForm" class="space-y-5">
+                    <div><label class="block text-sm font-medium mb-1">ইমেইল</label><input type="email" id="loginEmail" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-red-500" required></div>
+                    <div><label class="block text-sm font-medium mb-1">পাসওয়ার্ড</label><input type="password" id="loginPassword" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-red-500" required></div>
+                    <button type="submit" class="w-full bg-red-600 text-white font-bold py-3.5 rounded-lg shadow-md hover:bg-red-700 transition">লগইন</button>
+                </form>
+                <p class="text-center mt-6 text-sm text-gray-600">অ্যাকাউন্ট নেই? <a href="#register" class="text-red-600 font-bold hover:underline">ডোনার হোন</a></p>
+            </div>
+        </section>
+
+        <!-- DASHBOARD PAGE -->
+        <section id="dashboard" class="page-section">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6 flex flex-col md:flex-row items-center gap-6">
+                    <img id="dashPic" src="" class="w-24 h-24 rounded-full border-4 border-red-100 object-cover">
+                    <div class="text-center md:text-left flex-1">
+                        <h2 id="dashName" class="text-2xl font-bold text-gray-900"></h2>
+                        <p class="text-gray-500"><i class="fa-solid fa-droplet text-red-600 mr-1"></i> <span id="dashBlood"></span> | <span id="dashGender"></span></p>
+                    </div>
+                    <div id="dashEligibility" class="px-4 py-2 rounded-lg text-sm font-bold text-center border">
+                        <!-- Eligibility injected here -->
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <h3 class="text-lg font-bold mb-4 border-b pb-2"><i class="fa-solid fa-plus-circle text-red-600 mr-2"></i>নতুন রক্তদানের তথ্য যুক্ত করুন</h3>
+                    <form id="donationForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="block text-sm mb-1">তারিখ</label><input type="date" id="donDate" class="w-full p-3 border rounded-lg" required></div>
+                        <div><label class="block text-sm mb-1">হাসপাতালের নাম</label><input type="text" id="donHospital" class="w-full p-3 border rounded-lg" required></div>
+                        <div class="md:col-span-2"><label class="block text-sm mb-1">রোগীর বিবরণ / নোট (ঐচ্ছিক)</label><input type="text" id="donNote" class="w-full p-3 border rounded-lg"></div>
+                        <div class="md:col-span-2">
+                            <button type="submit" class="bg-gray-900 text-white px-6 py-2.5 rounded-lg hover:bg-black transition">তথ্য সংরক্ষণ করুন</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- STATIC PAGES -->
+        <section id="about" class="page-section max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+            <h2 class="text-2xl font-bold text-red-600 mb-6 border-b pb-2">আমাদের সম্পর্কে</h2>
+            <div class="prose prose-red text-gray-700 leading-relaxed">
+                <p><strong>হিতৈষী</strong> হলো বাংলাদেশের একটি প্রিমিয়াম এবং স্বেচ্ছাসেবী রক্তদান নেটওয়ার্ক। আমাদের মূল লক্ষ্য হলো রক্তদাতা এবং রক্তগ্রহীতার মধ্যে একটি দ্রুত ও নিরাপদ সেতুবন্ধন তৈরি করা।</p>
+                <h3 class="text-lg font-bold mt-6 mb-2">আমাদের লক্ষ্য:</h3>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li>জরুরি মুহূর্তে রক্তের অভাব দূর করা।</li>
+                    <li>রক্তদাতাদের একটি আধুনিক ও সুসংগঠিত ডাটাবেস তৈরি করা।</li>
+                    <li>রক্তদানে মানুষকে উৎসাহিত করা।</li>
+                </ul>
+                <h3 class="text-lg font-bold mt-6 mb-2">ডেভেলপার টিম:</h3>
+                <p>এই প্রজেক্টটি ডেভেলপ করা হয়েছে সর্বাধুনিক টেকনোলজি ব্যবহার করে যাতে ব্যবহারকারীরা একটি অ্যাপের মতো স্মুথ অভিজ্ঞতা পান। আমাদের ডেডিকেটেড টিম সবসময় এর মান উন্নয়নে কাজ করে যাচ্ছে।</p>
+            </div>
+        </section>
+
+        <section id="faq" class="page-section max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+            <h2 class="text-2xl font-bold text-red-600 mb-6 border-b pb-2">সাধারণ প্রশ্ন (FAQ)</h2>
+            <div class="space-y-4">
+                <details class="group border border-gray-200 rounded-lg p-4 cursor-pointer bg-gray-50">
+                    <summary class="font-bold text-gray-800 list-none flex justify-between">কে কে রক্ত দিতে পারবেন? <i class="fa-solid fa-chevron-down group-open:rotate-180 transition"></i></summary>
+                    <p class="mt-3 text-sm text-gray-600">যেকোনো সুস্থ ব্যক্তি, যার বয়স ১৮-৬০ বছরের মধ্যে এবং ওজন কমপক্ষে ৫০ কেজি, তিনি রক্ত দিতে পারবেন। পুরুষরা প্রতি ৩ মাস এবং নারীরা প্রতি ৪ মাস অন্তর রক্ত দিতে পারেন।</p>
+                </details>
+                <details class="group border border-gray-200 rounded-lg p-4 cursor-pointer bg-gray-50">
+                    <summary class="font-bold text-gray-800 list-none flex justify-between">অ্যাকাউন্ট তৈরি কি বাধ্যতামূলক? <i class="fa-solid fa-chevron-down group-open:rotate-180 transition"></i></summary>
+                    <p class="mt-3 text-sm text-gray-600">রক্ত খোঁজার জন্য কোনো অ্যাকাউন্টের প্রয়োজন নেই। তবে আপনি যদি ডোনার হিসেবে যুক্ত হতে চান, তবে আপনাকে অ্যাকাউন্ট তৈরি করতে হবে।</p>
+                </details>
+            </div>
+        </section>
+        
+        <section id="privacy" class="page-section max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+            <h2 class="text-2xl font-bold text-red-600 mb-6 border-b pb-2">প্রাইভেসি পলিসি</h2>
+            <p class="text-gray-700">হিতৈষী একটি পাবলিক প্ল্যাটফর্ম। ডোনার হিসেবে রেজিস্ট্রেশন করার সময় আপনি যে সকল তথ্য প্রদান করবেন (নাম, ছবি, নাম্বার, ঠিকানা) তা মানুষের উপকারের স্বার্থে ওয়েবসাইটে উন্মুক্ত থাকবে। আমরা আপনার পাসওয়ার্ড বাদে বাকি তথ্য ওয়েবসাইট ব্যবহারকারীদের দেখাতে বাধ্য।</p>
+        </section>
+
+        <section id="terms" class="page-section max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+            <h2 class="text-2xl font-bold text-red-600 mb-6 border-b pb-2">শর্তাবলী ও গাইডলাইন</h2>
+            <ul class="list-decimal pl-5 space-y-2 text-gray-700">
+                <li>ভুল তথ্য দিয়ে অ্যাকাউন্ট তৈরি করা সম্পূর্ণ নিষিদ্ধ।</li>
+                <li>মেডিকেল হিস্ট্রি (রোগ, সমস্যা) লুকানো অপরাধ। এর জন্য আপনার অ্যাকাউন্ট ডিজেবল করে দেওয়া হবে।</li>
+                <li>রক্তদানের পর ওয়েবসাইটে তথ্য আপডেট রাখা আপনার নৈতিক দায়িত্ব।</li>
+                <li>অ্যাডমিন যেকোনো সময় কোনো কারণ দর্শানো ছাড়াই অ্যাকাউন্ট বাতিল করার ক্ষমতা রাখেন।</li>
+            </ul>
+        </section>
+
+    </main>
+
+    <!-- Premium Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-12 mt-auto border-t-4 border-red-600">
+        <div class="container mx-auto px-4 lg:px-8 max-w-7xl grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+                <a href="#home" class="flex items-center gap-2 mb-4 text-decoration-none">
+                    <i class="fa-solid fa-droplet text-red-600 text-2xl"></i>
+                    <span class="text-2xl font-bold text-white tracking-tight">হিতৈষী</span>
+                </a>
+                <p class="text-sm text-gray-400 mb-4">একটি স্মার্ট ও প্রফেশনাল রক্তদান নেটওয়ার্ক। মানুষের প্রয়োজনে, মানুষের পাশে।</p>
+                <div class="flex gap-4">
+                    <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-red-600 transition text-white"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-red-600 transition text-white"><i class="fa-brands fa-twitter"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-4">প্রয়োজনীয় লিংক</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#home" class="hover:text-red-500 transition"><i class="fa-solid fa-angle-right mr-2 text-red-600"></i>ডোনার খুঁজুন</a></li>
+                    <li><a href="#about" class="hover:text-red-500 transition"><i class="fa-solid fa-angle-right mr-2 text-red-600"></i>আমাদের সম্পর্কে</a></li>
+                    <li><a href="#faq" class="hover:text-red-500 transition"><i class="fa-solid fa-angle-right mr-2 text-red-600"></i>সাধারণ প্রশ্ন (FAQ)</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-4">আইনি বিষয়াবলী</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#privacy" class="hover:text-red-500 transition"><i class="fa-solid fa-angle-right mr-2 text-red-600"></i>প্রাইভেসি পলিসি</a></li>
+                    <li><a href="#terms" class="hover:text-red-500 transition"><i class="fa-solid fa-angle-right mr-2 text-red-600"></i>শর্তাবলী ও গাইডলাইন</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="text-center text-xs text-gray-500 mt-12 border-t border-gray-800 pt-6">
+            &copy; <span id="year"></span> Hitoishi. All Rights Reserved. Developed for Bangladesh.
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // ==========================================
+        // CONFIGURATION & STATE
+        // ==========================================
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyCx5erW1E_13Gr9D-baB-62Trhk3Z2a8BW75eW6vKRqziV0CJ_QJ_X2tOVBmxjX_66/exec'; // <-- এখানে আপনার Web App URL দিন
+        let divisionsData = [];
+        let districtsData = [];
+        let currentUser = JSON.parse(localStorage.getItem('hitoishi_user')) || null;
+        let tempRegData = null;
+
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // ==========================================
+        // UI & ROUTING LOGIC
+        // ==========================================
+        function showLoader() { document.getElementById('loader').style.display = 'flex'; }
+        function hideLoader() { document.getElementById('loader').style.display = 'none'; }
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const backdrop = document.getElementById('menu-backdrop');
+            
+            if (menu.classList.contains('menu-hidden')) {
+                menu.classList.remove('menu-hidden');
+                menu.classList.add('menu-visible');
+                backdrop.classList.remove('hidden');
+                setTimeout(() => backdrop.classList.remove('opacity-0'), 10);
+            } else {
+                menu.classList.add('menu-hidden');
+                menu.classList.remove('menu-visible');
+                backdrop.classList.add('opacity-0');
+                setTimeout(() => backdrop.classList.add('hidden'), 300);
+            }
+        }
+
+        function handleRouting() {
+            const hash = window.location.hash || '#home';
+            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+            
+            const targetSection = document.querySelector(hash);
+            if(targetSection) {
+                targetSection.classList.add('active');
+            } else {
+                document.getElementById('home').classList.add('active'); // fallback
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            updateAuthUI();
+
+            // Setup specific page data
+            if(hash === '#dashboard' && currentUser) {
+                setupDashboard();
+            } else if (hash === '#dashboard' && !currentUser) {
+                window.location.hash = '#login';
+            }
+        }
+
+        window.addEventListener('hashchange', handleRouting);
+
+        function updateAuthUI() {
+            const deskAuth = document.getElementById('desktop-auth-buttons');
+            const deskUser = document.getElementById('desktop-user-menu');
+            const mobAuth = document.getElementById('mobile-auth-buttons');
+            const mobUser = document.getElementById('mobile-user-menu');
+
+            if (currentUser) {
+                deskAuth.classList.add('hidden');
+                deskUser.classList.remove('hidden');
+                document.getElementById('nav-user-name').textContent = currentUser.name;
+                document.getElementById('nav-profile-pic').src = currentUser.profilePic || 'https://via.placeholder.com/150';
+                
+                mobAuth.classList.add('hidden');
+                mobUser.classList.remove('hidden');
+            } else {
+                deskAuth.classList.remove('hidden');
+                deskUser.classList.add('hidden');
+                
+                mobAuth.classList.remove('hidden');
+                mobUser.classList.add('hidden');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('hitoishi_user');
+            currentUser = null;
+            window.location.hash = '#home';
+            alert('সফলভাবে লগআউট হয়েছেন।');
+        }
+
+        // ==========================================
+        // DATA FETCHING & FORM SETUP
+        // ==========================================
+        async function loadGeoData() {
+            showLoader();
+            try {
+                // Assuming json files are in the same directory. 
+                // In production, ensure these are hosted accessible via URL.
+                const resDiv = await fetch('divisions.json');
+                const divJson = await resDiv.json();
+                divisionsData = divJson[2].data; // Based on provided structure
+
+                const resDist = await fetch('districts.json');
+                const distJson = await resDist.json();
+                districtsData = distJson[2].data; // Based on provided structure
+
+                populateDivisions('searchDivision');
+                populateDivisions('regDivision');
+            } catch (error) {
+                console.error("Geo Data Load Error: ", error);
+                // Fallback for local testing if fetch fails due to CORS
+                alert('ডেটা লোড করতে সমস্যা হচ্ছে। সার্ভার থেকে ফাইল রান করুন।');
+            }
+            hideLoader();
+        }
+
+        function populateDivisions(selectId) {
+            const select = document.getElementById(selectId);
+            divisionsData.forEach(div => {
+                select.innerHTML += `<option value="${div.id}">${div.bn_name} (${div.name})</option>`;
+            });
+        }
+
+        function handleDivisionChange(divSelectId, distSelectId) {
+            const divId = document.getElementById(divSelectId).value;
+            const distSelect = document.getElementById(distSelectId);
+            distSelect.innerHTML = '<option value="">জেলা নির্বাচন করুন</option>';
+            
+            if (divId) {
+                distSelect.disabled = false;
+                const filtered = districtsData.filter(d => d.division_id === divId);
+                filtered.forEach(dist => {
+                    distSelect.innerHTML += `<option value="${dist.id}">${dist.bn_name} (${dist.name})</option>`;
+                });
+            } else {
+                distSelect.disabled = true;
+            }
+        }
+
+        document.getElementById('searchDivision').addEventListener('change', () => handleDivisionChange('searchDivision', 'searchDistrict'));
+        document.getElementById('regDivision').addEventListener('change', () => handleDivisionChange('regDivision', 'regDistrict'));
+
+        // Phone number +880 restriction
+        function enforcePhonePrefix(e) {
+            if (!e.target.value.startsWith('+880')) {
+                e.target.value = '+880';
+            }
+        }
+        document.getElementById('regPhone1').addEventListener('input', enforcePhonePrefix);
+        document.getElementById('regPhone2').addEventListener('input', enforcePhonePrefix);
+
+        // Image to Base64 with Resizing (For Apps Script limits)
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Resize image using Canvas
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const maxW = 300; // Small size for fast DB storage
+                        const scale = maxW / img.width;
+                        canvas.width = maxW;
+                        canvas.height = img.height * scale;
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        
+                        const base64 = canvas.toDataURL('image/jpeg', 0.8);
+                        document.getElementById('imgPreview').src = base64;
+                        document.getElementById('imgPreview').classList.remove('hidden');
+                        document.getElementById('imgIcon').classList.add('hidden');
+                        document.getElementById('regPicBase64').value = base64;
+                    }
+                    img.src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // ==========================================
+        // API CALLS (FETCH)
+        // ==========================================
+        
+        // 1. REGISTRATION & OTP
+        document.getElementById('regForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const data = {
+                action: 'sendOTP',
+                name: document.getElementById('regName').value,
+                email: document.getElementById('regEmail').value,
+                password: document.getElementById('regPassword').value, // In production, hash this.
+                bloodGroup: document.getElementById('regBlood').value,
+                gender: document.getElementById('regGender').value,
+                phone1: document.getElementById('regPhone1').value,
+                phone2: document.getElementById('regPhone2').value,
+                division: document.getElementById('regDivision').options[document.getElementById('regDivision').selectedIndex].text,
+                district: document.getElementById('regDistrict').options[document.getElementById('regDistrict').selectedIndex].text,
+                detailedAddress: document.getElementById('regAddress').value,
+                profilePic: document.getElementById('regPicBase64').value,
+                smoker: document.querySelector('input[name="regSmoker"]:checked').value,
+                hasDisease: document.querySelector('input[name="regDisease"]:checked').value
+            };
+
+            showLoader();
+            try {
+                const res = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                
+                if(result.status === 'success') {
+                    tempRegData = data.email;
+                    document.getElementById('regForm').classList.add('hidden');
+                    document.getElementById('otpSection').classList.remove('hidden');
+                    alert(result.message);
+                } else {
+                    alert(result.message);
+                }
+            } catch (err) { alert('Network Error!'); }
+            hideLoader();
+        });
+
+        async function verifyOTP() {
+            const otp = document.getElementById('otpInput').value;
+            if(otp.length !== 6) return alert('সঠিক ৬-ডিজিটের কোড দিন।');
+
+            showLoader();
+            try {
+                const res = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'verifyOTP', email: tempRegData, otp: otp })
+                });
+                const result = await res.json();
+                
+                if(result.status === 'success' || result.status === 'success_banned') {
+                    alert(result.message);
+                    window.location.hash = '#login';
+                    // Reset Form
+                    document.getElementById('regForm').reset();
+                    document.getElementById('regForm').classList.remove('hidden');
+                    document.getElementById('otpSection').classList.add('hidden');
+                } else {
+                    alert(result.message);
+                }
+            } catch (err) { alert('Network Error!'); }
+            hideLoader();
+        }
+
+        // 2. LOGIN
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            showLoader();
+            try {
+                const res = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'login',
+                        email: document.getElementById('loginEmail').value,
+                        password: document.getElementById('loginPassword').value
+                    })
+                });
+                const result = await res.json();
+                
+                if(result.status === 'success') {
+                    currentUser = result.user;
+                    localStorage.setItem('hitoishi_user', JSON.stringify(currentUser));
+                    document.getElementById('loginForm').reset();
+                    window.location.hash = '#dashboard';
+                } else {
+                    alert(result.message);
+                }
+            } catch (err) { alert('Network Error!'); }
+            hideLoader();
+        });
+
+        // 3. DASHBOARD LOGIC
+        function setupDashboard() {
+            document.getElementById('dashName').textContent = currentUser.name;
+            document.getElementById('dashBlood').textContent = currentUser.bloodGroup;
+            document.getElementById('dashGender').textContent = currentUser.gender === 'Male' ? 'পুরুষ' : 'মহিলা';
+            document.getElementById('dashPic').src = currentUser.profilePic || 'https://via.placeholder.com/150';
+
+            // Eligibility Logic
+            const elDiv = document.getElementById('dashEligibility');
+            if(!currentUser.lastDonation) {
+                elDiv.className = 'px-4 py-2 rounded-lg text-sm font-bold text-center border bg-green-50 border-green-200 text-green-700';
+                elDiv.innerHTML = '<i class="fa-solid fa-check-circle mr-1"></i> আপনি রক্ত দিতে প্রস্তুত!';
+            } else {
+                const lastDate = new Date(currentUser.lastDonation);
+                const daysReq = currentUser.gender === 'Male' ? 90 : 120;
+                const nextDate = new Date(lastDate.getTime() + (daysReq * 24 * 60 * 60 * 1000));
+                const today = new Date();
+
+                if(today >= nextDate) {
+                    elDiv.className = 'px-4 py-2 rounded-lg text-sm font-bold text-center border bg-green-50 border-green-200 text-green-700';
+                    elDiv.innerHTML = '<i class="fa-solid fa-check-circle mr-1"></i> আপনি রক্ত দিতে প্রস্তুত!';
+                } else {
+                    const diffDays = Math.ceil(Math.abs(nextDate - today) / (1000 * 60 * 60 * 24));
+                    elDiv.className = 'px-4 py-2 rounded-lg text-sm font-bold text-center border bg-red-50 border-red-200 text-red-700';
+                    elDiv.innerHTML = `<i class="fa-solid fa-clock mr-1"></i> এখনই পারবেন না। আরও ${diffDays} দিন পর পারবেন।`;
+                }
+            }
+        }
+
+        document.getElementById('donationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            showLoader();
+            try {
+                const res = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'addDonation',
+                        userId: currentUser.id,
+                        date: document.getElementById('donDate').value,
+                        hospital: document.getElementById('donHospital').value,
+                        details: document.getElementById('donNote').value
+                    })
+                });
+                const result = await res.json();
+                alert(result.message);
+                if(result.status === 'success') {
+                    currentUser.lastDonation = document.getElementById('donDate').value;
+                    localStorage.setItem('hitoishi_user', JSON.stringify(currentUser));
+                    setupDashboard();
+                    document.getElementById('donationForm').reset();
+                }
+            } catch (err) { alert('Network Error!'); }
+            hideLoader();
+        });
+
+        // 4. SEARCH & PROFILE VIEW
+        document.getElementById('searchForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const bGroup = document.getElementById('searchBloodGroup').value;
+            const divId = document.getElementById('searchDivision').value;
+            const distId = document.getElementById('searchDistrict').value;
+            
+            const divText = divId ? document.getElementById('searchDivision').options[document.getElementById('searchDivision').selectedIndex].text : '';
+            const distText = distId ? document.getElementById('searchDistrict').options[document.getElementById('searchDistrict').selectedIndex].text : '';
+
+            showLoader();
+            try {
+                const res = await fetch(`${SCRIPT_URL}?action=getDonors&bloodGroup=${encodeURIComponent(bGroup)}&division=${encodeURIComponent(divText)}&district=${encodeURIComponent(distText)}`);
+                const result = await res.json();
+                
+                const resArea = document.getElementById('searchResultsArea');
+                const grid = document.getElementById('resultsGrid');
+                const count = document.getElementById('resultCount');
+                
+                resArea.classList.remove('hidden');
+                grid.innerHTML = '';
+                
+                if(result.status === 'success' && result.data.length > 0) {
+                    count.textContent = result.data.length + ' জন';
+                    result.data.forEach(donor => {
+                        // Check eligibility for search cards
+                        let isEligible = true;
+                        if(donor.lastDonation) {
+                            const lastDate = new Date(donor.lastDonation);
+                            const daysReq = donor.gender === 'Male' ? 90 : 120;
+                            const nextDate = new Date(lastDate.getTime() + (daysReq * 24 * 60 * 60 * 1000));
+                            if(new Date() < nextDate) isEligible = false;
+                        }
+
+                        const badge = isEligible 
+                            ? `<span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-bold border border-green-200"><i class="fa-solid fa-check"></i> প্রস্তুত</span>`
+                            : `<span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full font-bold border border-red-200"><i class="fa-solid fa-xmark"></i> এখনই পারবেন না</span>`;
+
+                        grid.innerHTML += `
+                            <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <img src="${donor.profilePic || 'https://via.placeholder.com/150'}" class="w-14 h-14 rounded-full object-cover border-2 border-red-100">
+                                    <div>
+                                        <h4 class="font-bold text-lg text-gray-900 leading-tight">${donor.name}</h4>
+                                        <p class="text-sm text-gray-500">${donor.district}</p>
+                                    </div>
+                                    <div class="ml-auto text-xl font-bold text-red-600 bg-red-50 w-10 h-10 flex items-center justify-center rounded-lg border border-red-100">${donor.bloodGroup}</div>
+                                </div>
+                                <div class="flex justify-between items-center mt-4">
+                                    ${badge}
+                                    <button onclick="viewProfile('${donor.id}')" class="text-red-600 font-medium text-sm hover:underline">বিস্তারিত দেখুন <i class="fa-solid fa-arrow-right text-xs"></i></button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    count.textContent = '0';
+                    grid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-10 bg-gray-50 rounded-xl border border-dashed border-gray-300">কোনো ডোনার পাওয়া যায়নি। অন্য এলাকা বা গ্রুপ দিয়ে চেষ্টা করুন।</div>';
+                }
+            } catch (err) { alert('Network Error!'); }
+            hideLoader();
+        });
+
+        async function viewProfile(id) {
+            showLoader();
+            try {
+                const res = await fetch(`${SCRIPT_URL}?action=getDonorDetails&id=${id}`);
+                const result = await res.json();
+                
+                if(result.status === 'success') {
+                    const u = result.user;
+                    let html = `
+                        <div class="flex flex-col md:flex-row gap-8 items-start">
+                            <img src="${u.profilePic || 'https://via.placeholder.com/150'}" class="w-32 h-32 rounded-2xl object-cover shadow-md border-4 border-white">
+                            <div class="flex-1">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h2 class="text-3xl font-bold text-gray-900 mb-1">${u.name}</h2>
+                                        <p class="text-gray-500"><i class="fa-solid fa-location-dot mr-1"></i> ${u.address}</p>
+                                    </div>
+                                    <div class="text-3xl font-bold text-red-600 bg-red-50 px-4 py-2 rounded-xl border border-red-100 shadow-sm">${u.bloodGroup}</div>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-4 mt-6">
+                                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                                        <p class="text-xs text-gray-500 mb-1">ফোন নাম্বার (১)</p>
+                                        <p class="font-bold text-gray-800"><a href="tel:${u.phone1}"><i class="fa-solid fa-phone text-red-600 mr-1"></i> ${u.phone1}</a></p>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                                        <p class="text-xs text-gray-500 mb-1">ফোন নাম্বার (২)</p>
+                                        <p class="font-bold text-gray-800">${u.phone2 ? `<a href="tel:${u.phone2}"><i class="fa-solid fa-phone text-red-600 mr-1"></i> ${u.phone2}</a>` : 'দেওয়া নেই'}</p>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                                        <p class="text-xs text-gray-500 mb-1">সর্বমোট রক্তদান</p>
+                                        <p class="font-bold text-gray-800"><i class="fa-solid fa-hand-holding-droplet text-red-600 mr-1"></i> ${u.total || 0} বার</p>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
+                                        <p class="text-xs text-gray-500 mb-1">শেষ রক্তদানের তারিখ</p>
+                                        <p class="font-bold text-gray-800">${u.lastDonation ? new Date(u.lastDonation).toLocaleDateString() : 'এখনো দেননি'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Feedback Section -->
+                        <div class="mt-10 pt-8 border-t border-gray-100">
+                            <h3 class="text-xl font-bold mb-4">মতামত (Reviews)</h3>
+                            
+                            <!-- Add Review Form -->
+                            <form onsubmit="submitReview(event, '${id}')" class="mb-6 bg-blue-50 p-4 rounded-xl border border-blue-100">
+                                <p class="text-sm text-blue-800 font-medium mb-3">এই ডোনারের থেকে রক্ত নিয়ে থাকলে আপনার মতামত জানান:</p>
+                                <input type="text" id="revName" placeholder="আপনার নাম" class="w-full p-2 mb-2 border rounded" required>
+                                <textarea id="revComment" placeholder="মতামত লিখুন..." class="w-full p-2 mb-2 border rounded" required></textarea>
+                                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded text-sm font-bold hover:bg-blue-700">মতামত জমা দিন</button>
+                            </form>
+
+                            <div class="space-y-4">
+                                ${result.reviews.length > 0 ? result.reviews.map(r => `
+                                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                                        <div class="flex justify-between mb-2">
+                                            <span class="font-bold text-gray-800"><i class="fa-solid fa-user-circle text-gray-400 mr-1"></i> ${r.reviewer}</span>
+                                            <span class="text-xs text-gray-500">${new Date(r.date).toLocaleDateString()}</span>
+                                        </div>
+                                        <p class="text-gray-700 text-sm">"${r.comment}"</p>
+                                    </div>
+                                `).join('') : '<p class="text-gray-500 text-sm italic">এখনো কোনো মতামত নেই।</p>'}
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('profileContent').innerHTML = html;
+                    window.location.hash = '#donor-profile';
+                }
+            } catch (err) { alert('Network Error!'); }
+            hideLoader();
+        }
+
+        async function submitReview(e, donorId) {
+            e.preventDefault();
+            const name = document.getElementById('revName').value;
+            const comment = document.getElementById('revComment').value;
+            
+            showLoader();
+            try {
+                const res = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'addReview', donorId: donorId, reviewerName: name, comment: comment })
+                });
+                const result = await res.json();
+                alert(result.message);
+                if(result.status === 'success') {
+                    viewProfile(donorId); // Refresh profile
+                }
+            } catch (err) { alert('Network Error!'); }
+            hideLoader();
+        }
+
+        // ==========================================
+        // INITIALIZATION
+        // ==========================================
+        window.onload = () => {
+            handleRouting();
+            loadGeoData();
+        };
+
+    </script>
+</body>
+</html>
