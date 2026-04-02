@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Hitoishi (হিতৈষী) - বাংলাদেশের প্রিমিয়াম রক্তদান নেটওয়ার্ক।">
-    <meta name="theme-color" content="#dc2626">
-    <title>Hitoishi (হিতৈষী) | রক্তদান নেটওয়ার্ক</title>
-
-    <!-- SEO & Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23dc2626'><path d='M12 21.5c-3.6 0-6.5-2.9-6.5-6.5 0-4.5 6.5-12.5 6.5-12.5s6.5 8 6.5 12.5c0 3.6-2.9 6.5-6.5 6.5z'/></svg>">
+    <title>Hitoishi (হিতৈষী) | Premium Blood Network</title>
+    <meta name="description" content="হিতৈষী - বাংলাদেশের স্মার্ট এবং প্রিমিয়াম রক্তদান নেটওয়ার্ক।">
+    <meta name="theme-color" content="#b91c1c">
+    
+    <!-- Favicon (Dummy path, replace with actual) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩸</text></svg>">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -17,884 +17,1255 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-    <!-- Custom CSS -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'Hind Siliguri', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fef2f2', 100: '#fee2e2', 500: '#ef4444', 600: '#dc2626', 700: '#b91c1c', 900: '#7f1d1d'
+                        }
+                    },
+                    fontSize: {
+                        'xs': '0.875rem', 'sm': '1rem', 'base': '1.125rem', 'lg': '1.25rem', 'xl': '1.5rem'
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        body { font-family: 'Hind Siliguri', 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        
-        /* Blood Drop Loading Animation */
-        .loader-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s; }
-        .blood-drop { position: relative; width: 40px; height: 40px; background: #dc2626; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); animation: pulse 1.5s infinite; }
-        .blood-drop::after { content: ''; position: absolute; top: 10px; left: 10px; width: 10px; height: 10px; background: rgba(255,255,255,0.5); border-radius: 50%; }
-        @keyframes pulse { 0% { transform: rotate(-45deg) scale(0.8); opacity: 0.8; } 50% { transform: rotate(-45deg) scale(1.1); opacity: 1; } 100% { transform: rotate(-45deg) scale(0.8); opacity: 0.8; } }
-        
-        /* Page Transitions */
-        .page-section { display: none; animation: fadeIn 0.4s ease-in-out; }
-        .page-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Custom Scrollbar */
+        /* Premium Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #dc2626; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #b91c1c; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #7f1d1d; }
+
+        body { -webkit-tap-highlight-color: transparent; background-color: #f9fafb; color: #1f2937; }
+        
+        /* Smooth Transitions */
+        .page-section { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .page-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Blood Drop Loading Animation */
+        #global-loader {
+            position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 9999;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .blood-drop {
+            width: 40px; height: 40px; background: #dc2626; border-radius: 0 50% 50% 50%;
+            transform: rotate(45deg); animation: dropPulse 1s infinite;
+        }
+        @keyframes dropPulse {
+            0% { transform: rotate(45deg) scale(0.8); opacity: 0.7; }
+            50% { transform: rotate(45deg) scale(1.1); opacity: 1; }
+            100% { transform: rotate(45deg) scale(0.8); opacity: 0.7; }
+        }
 
         /* Mobile Menu Transitions */
-        .menu-hidden { transform: translateX(100%); }
-        .menu-visible { transform: translateX(0); box-shadow: -5px 0 15px rgba(0,0,0,0.1); }
+        #mobile-menu { transform: translateX(100%); transition: transform 0.3s ease-in-out; }
+        #mobile-menu.open { transform: translateX(0); }
+        #menu-overlay { opacity: 0; pointer-events: none; transition: opacity 0.3s ease-in-out; }
+        #menu-overlay.open { opacity: 1; pointer-events: auto; }
+        
+        .premium-shadow { box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 antialiased flex flex-col min-h-screen">
+<body class="antialiased min-h-screen flex flex-col">
 
-    <!-- Loading Screen -->
-    <div id="loader" class="loader-overlay">
-        <div class="blood-drop mb-6"></div>
-        <h2 class="text-xl font-bold text-red-600 tracking-wide">হিতৈষী</h2>
-        <p class="text-sm text-gray-500 mt-2">অপেক্ষা করুন...</p>
+    <!-- Global Loader -->
+    <div id="global-loader">
+        <div class="blood-drop mb-4"></div>
+        <p class="text-sm font-semibold text-brand-700">লোড হচ্ছে...</p>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-5 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-full text-sm shadow-xl z-50 transition-all duration-300 opacity-0 translate-y-[-20px] pointer-events-none">
+        Message here
     </div>
 
     <!-- Navigation Bar -->
-    <header class="bg-white shadow-sm sticky top-0 z-40 border-b border-gray-100">
-        <div class="container mx-auto px-4 lg:px-8 py-4 flex justify-between items-center max-w-7xl">
-            <!-- Logo -->
-            <a href="#home" class="flex items-center gap-2 group text-decoration-none">
-                <i class="fa-solid fa-droplet text-red-600 text-2xl group-hover:scale-110 transition-transform"></i>
-                <span class="text-2xl font-bold text-gray-900 tracking-tight">হিতৈষী</span>
-            </a>
-
-            <!-- Desktop Menu -->
-            <nav class="hidden md:flex items-center gap-6 font-medium text-gray-600">
-                <a href="#home" class="hover:text-red-600 transition">হোম</a>
-                <a href="#about" class="hover:text-red-600 transition">আমাদের সম্পর্কে</a>
-                <a href="#faq" class="hover:text-red-600 transition">সাধারণ প্রশ্ন (FAQ)</a>
-                
-                <div id="desktop-auth-buttons" class="flex items-center gap-3 border-l pl-6 border-gray-200">
-                    <a href="#login" class="text-gray-700 hover:text-red-600 transition">লগইন</a>
-                    <a href="#register" class="bg-red-600 text-white px-5 py-2 rounded-full hover:bg-red-700 shadow-md transition">ডোনার হোন</a>
-                </div>
-                
-                <div id="desktop-user-menu" class="hidden flex items-center gap-3 border-l pl-6 border-gray-200">
-                    <a href="#dashboard" class="flex items-center gap-2 text-gray-700 hover:text-red-600">
-                        <img id="nav-profile-pic" src="" class="w-8 h-8 rounded-full border border-gray-300 object-cover" alt="Profile">
-                        <span id="nav-user-name" class="font-bold"></span>
-                    </a>
-                    <button onclick="logout()" class="text-sm text-red-600 hover:underline"><i class="fa-solid fa-sign-out-alt"></i></button>
-                </div>
-            </nav>
-
-            <!-- Mobile Menu Toggle -->
-            <button onclick="toggleMenu()" class="md:hidden text-gray-700 hover:text-red-600 text-2xl">
-                <i class="fa-solid fa-bars-staggered"></i>
-            </button>
-        </div>
-    </header>
-
-    <!-- Mobile Menu (Off-Canvas Right) -->
-    <div id="menu-backdrop" class="fixed inset-0 bg-black/40 z-40 hidden opacity-0 transition-opacity duration-300" onclick="toggleMenu()"></div>
-    <div id="mobile-menu" class="fixed top-0 right-0 h-full w-72 bg-white z-50 menu-hidden transition-transform duration-300 flex flex-col">
-        <div class="p-5 border-b flex justify-between items-center bg-gray-50">
-            <span class="font-bold text-lg text-red-600"><i class="fa-solid fa-droplet mr-2"></i>মেনু</span>
-            <button onclick="toggleMenu()" class="text-gray-500 hover:text-red-600 text-xl"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div class="flex-1 overflow-y-auto py-4 px-5 flex flex-col gap-4 text-lg text-gray-700">
-            <a href="#home" onclick="toggleMenu()" class="border-b pb-2"><i class="fa-solid fa-home w-6 text-gray-400"></i> হোম</a>
-            <a href="#about" onclick="toggleMenu()" class="border-b pb-2"><i class="fa-solid fa-info-circle w-6 text-gray-400"></i> আমাদের সম্পর্কে</a>
-            <a href="#faq" onclick="toggleMenu()" class="border-b pb-2"><i class="fa-solid fa-question-circle w-6 text-gray-400"></i> সাধারণ প্রশ্ন</a>
-            
-            <div id="mobile-auth-buttons" class="mt-4 flex flex-col gap-3">
-                <a href="#login" onclick="toggleMenu()" class="text-center py-2 border border-gray-300 rounded-lg text-gray-700 font-medium">লগইন করুন</a>
-                <a href="#register" onclick="toggleMenu()" class="text-center py-2 bg-red-600 text-white rounded-lg font-medium shadow-md">নতুন ডোনার হোন</a>
-            </div>
-
-            <div id="mobile-user-menu" class="hidden mt-4 flex flex-col gap-3">
-                <a href="#dashboard" onclick="toggleMenu()" class="flex items-center gap-3 p-3 bg-red-50 rounded-lg border border-red-100">
-                    <i class="fa-solid fa-user-circle text-red-600 text-2xl"></i>
-                    <span class="font-bold text-red-800">আমার ড্যাশবোর্ড</span>
+    <nav class="bg-white premium-shadow sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <!-- Logo -->
+                <a href="#home" class="flex items-center gap-2">
+                    <i class="fa-solid fa-droplet text-brand-600 text-xl"></i>
+                    <span class="font-bold text-xl tracking-tight text-gray-900">হিতৈষী</span>
                 </a>
-                <button onclick="logout(); toggleMenu()" class="text-left text-red-600 font-medium py-2"><i class="fa-solid fa-sign-out-alt w-6"></i> লগআউট</button>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-6 items-center">
+                    <a href="#home" class="text-sm font-medium hover:text-brand-600 transition">হোম</a>
+					<a href="#about" class="text-sm font-medium hover:text-brand-600 transition">আমাদের সম্পর্কে</a>
+                    <a href="#donors" class="text-sm font-medium hover:text-brand-600 transition">ডোনার ফান্ড</a>
+                    <a href="#faq" class="text-sm font-medium hover:text-brand-600 transition">FAQ</a>
+					<a href="#guideline" class="text-sm font-medium hover:text-brand-600 transition">Guidelines</a>
+					
+                    
+                    <div id="desktop-auth-buttons" class="flex gap-3">
+                        <a href="#login" class="text-sm font-medium text-gray-700 hover:text-brand-600 transition">লগইন</a>
+                        <a href="#register" class="bg-brand-600 text-white px-4 py-1.5 rounded-full text-sm font-medium hover:bg-brand-700 transition">যুক্ত হোন</a>
+                    </div>
+                    <div id="desktop-user-menu" class="hidden">
+                        <a href="#profile" class="text-sm font-medium bg-gray-100 px-4 py-1.5 rounded-full hover:bg-gray-200 transition"><i class="fa-solid fa-user mr-1"></i> প্রোফাইল</a>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="menu-btn" class="text-gray-600 hover:text-brand-600 focus:outline-none p-2">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay & Drawer -->
+    <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40"></div>
+    <div id="mobile-menu" class="fixed inset-y-0 right-0 max-w-xs w-64 bg-white shadow-2xl z-50 flex flex-col">
+        <div class="p-5 flex justify-between items-center border-b border-gray-100">
+            <span class="font-bold text-lg text-brand-600">মেনু</span>
+            <button id="close-menu-btn" class="text-gray-400 hover:text-gray-600 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-5 flex flex-col gap-4">
+            <a href="#home" class="menu-link text-base text-gray-700 hover:text-brand-600"><i class="fa-solid fa-house w-6 text-center"></i> হোম</a>
+            <a href="#donors" class="menu-link text-base text-gray-700 hover:text-brand-600"><i class="fa-solid fa-hand-holding-heart w-6 text-center"></i> ডোনার ফান্ড</a>
+            <a href="#about" class="menu-link text-base text-gray-700 hover:text-brand-600"><i class="fa-solid fa-info-circle w-6 text-center"></i> আমাদের সম্পর্কে</a>
+            <a href="#faq" class="menu-link text-base text-gray-700 hover:text-brand-600"><i class="fa-solid fa-question-circle w-6 text-center"></i> সাধারণ জিজ্ঞাসা (FAQ)</a>
+            <hr class="border-gray-100">
+            <div id="mobile-auth-buttons" class="flex flex-col gap-3 mt-2">
+                <a href="#login" class="menu-link border border-brand-600 text-brand-600 text-center py-2 rounded-lg text-sm font-medium">লগইন করুন</a>
+                <a href="#register" class="menu-link bg-brand-600 text-white text-center py-2 rounded-lg text-sm font-medium">ডোনার হিসেবে যুক্ত হোন</a>
+            </div>
+            <div id="mobile-user-menu" class="hidden flex-col gap-3 mt-2">
+                <a href="#profile" class="menu-link bg-gray-100 text-gray-800 text-center py-2 rounded-lg text-sm font-medium">আমার প্রোফাইল</a>
+                <button onclick="logout()" class="border border-red-500 text-red-500 text-center py-2 rounded-lg text-sm font-medium">লগআউট</button>
             </div>
         </div>
     </div>
 
-    <!-- MAIN CONTENT AREA -->
-    <main class="flex-1 container mx-auto px-4 lg:px-8 py-8 max-w-7xl">
+    <!-- MAIN CONTENT AREA (SPA Container) -->
+    <main class="flex-grow w-full max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
         
-        <!-- HOME / SEARCH PAGE -->
+        <!-- SECTION: HOME (Search) -->
         <section id="home" class="page-section active">
-            <!-- Hero -->
-            <div class="text-center max-w-2xl mx-auto mb-10">
-                <h1 class="text-3xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">রক্ত দিন, <span class="text-red-600">জীবন বাঁচান</span></h1>
-                <p class="text-gray-600 text-lg">বাংলাদেশের যেকোনো প্রান্তে আপনার প্রয়োজনীয় রক্তের গ্রুপের ডোনার খুঁজে বের করুন মুহূর্তেই।</p>
+            <div class="text-center mb-8 pt-4">
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">রক্ত খুঁজছেন?</h1>
+                <p class="text-sm text-gray-500">লগইন ছাড়াই দ্রুত ডোনার খুঁজে বের করুন।</p>
             </div>
-
-            <!-- Search Card -->
-            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.05)] border border-gray-100 max-w-4xl mx-auto relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-full -z-10 opacity-50"></div>
-                <h2 class="text-xl font-bold mb-6 border-l-4 border-red-600 pl-3">ডোনার খুঁজুন</h2>
-                
-                <form id="searchForm" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            
+            <div class="bg-white rounded-2xl p-6 premium-shadow max-w-3xl mx-auto">
+                <form id="search-form" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">রক্তের গ্রুপ</label>
-                        <select id="searchBloodGroup" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 bg-white" required>
-                            <option value="">নির্বাচন করুন</option>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">রক্তের গ্রুপ</label>
+                        <select id="search-bg" class="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                            <option value="">সব গ্রুপ</option>
                             <option value="A+">A+</option><option value="A-">A-</option>
                             <option value="B+">B+</option><option value="B-">B-</option>
-                            <option value="O+">O+</option><option value="O-">O-</option>
                             <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                            <option value="O+">O+</option><option value="O-">O-</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">বিভাগ</label>
-                        <select id="searchDivision" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 bg-white" required>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">বিভাগ</label>
+                        <select id="search-div" onchange="populateSearchDistricts()" class="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
                             <option value="">নির্বাচন করুন</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">জেলা</label>
-                        <select id="searchDistrict" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 bg-white" required disabled>
-                            <option value="">আগে বিভাগ নির্বাচন করুন</option>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">জেলা</label>
+                        <select id="search-dist" class="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                            <option value="">আগে বিভাগ দিন</option>
                         </select>
                     </div>
                     <div class="md:col-span-3">
-                        <button type="submit" class="w-full bg-red-600 text-white font-bold py-3.5 rounded-lg shadow-md hover:bg-red-700 transition flex justify-center items-center gap-2">
-                            <i class="fa-solid fa-magnifying-glass"></i> ডোনার খুঁজুন
-                        </button>
+                        <button type="submit" class="w-full bg-brand-600 text-white font-medium rounded-lg p-3 text-sm hover:bg-brand-700 transition shadow-md hover:shadow-lg"><i class="fa-solid fa-magnifying-glass mr-2"></i> ডোনার খুঁজুন</button>
                     </div>
                 </form>
             </div>
 
-            <!-- Search Results Area -->
-            <div id="searchResultsArea" class="mt-12 hidden">
-                <h3 class="text-xl font-bold mb-4 text-gray-800">অনুসন্ধানের ফলাফল <span id="resultCount" class="text-sm bg-gray-200 text-gray-700 py-1 px-3 rounded-full ml-2">0</span></h3>
-                <div id="resultsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Results injected here -->
-                </div>
+            <div id="search-results" class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 hidden">
+                <!-- Results will be injected here -->
+            </div>
+            <div id="search-empty" class="mt-8 text-center hidden">
+                <i class="fa-regular fa-folder-open text-4xl text-gray-300 mb-2"></i>
+                <p class="text-sm text-gray-500">কোনো ডোনার পাওয়া যায়নি।</p>
             </div>
         </section>
 
-        <!-- DONOR DETAILS PAGE (MODAL OR SEPARATE PAGE) -->
-        <section id="donor-profile" class="page-section">
-            <button onclick="window.history.back()" class="mb-5 text-gray-500 hover:text-red-600 font-medium"><i class="fa-solid fa-arrow-left mr-2"></i>ফিরে যান</button>
-            <div id="profileContent" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 max-w-4xl mx-auto">
-                <!-- Content injected via JS -->
-            </div>
-        </section>
-
-        <!-- REGISTER PAGE -->
+        <!-- SECTION: REGISTER -->
         <section id="register" class="page-section">
-            <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <div class="bg-red-50 p-6 border-b border-red-100">
-                    <h2 class="text-2xl font-bold text-red-800 text-center"><i class="fa-solid fa-heart-circle-plus mr-2"></i>নতুন ডোনার অ্যাকাউন্ট</h2>
-                    <p class="text-center text-sm text-red-600 mt-1">দয়া করে সঠিক তথ্য দিন। আপনার তথ্য ওয়েবসাইট ব্যবহারকারীদের কাছে উন্মুক্ত (Public) থাকবে।</p>
-                </div>
+            <div class="max-w-2xl mx-auto bg-white rounded-2xl p-6 sm:p-8 premium-shadow">
+                <h2 class="text-xl font-bold text-center mb-6">ডোনার হিসেবে যুক্ত হোন</h2>
                 
-                <form id="regForm" class="p-6 md:p-8 space-y-6">
-                    <!-- Profile Picture -->
-                    <div class="flex flex-col items-center mb-6">
-                        <div class="w-24 h-24 rounded-full border-4 border-gray-200 overflow-hidden bg-gray-50 flex justify-center items-center relative mb-3">
-                            <img id="imgPreview" src="" class="w-full h-full object-cover hidden">
-                            <i id="imgIcon" class="fa-solid fa-camera text-3xl text-gray-300"></i>
+                <form id="register-form" class="space-y-4">
+                    <!-- Photo -->
+                    <div class="flex flex-col items-center mb-4">
+                        <div class="w-24 h-24 rounded-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden mb-2 relative">
+                            <img id="reg-pic-preview" src="" class="hidden w-full h-full object-cover">
+                            <i id="reg-pic-icon" class="fa-solid fa-camera text-gray-400 text-2xl"></i>
+                            <input type="file" id="reg-pic" accept="image/*" required class="absolute inset-0 opacity-0 cursor-pointer" onchange="previewImage(event)">
                         </div>
-                        <label class="cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm py-2 px-4 rounded-full transition">
-                            ছবি আপলোড করুন (বাধ্যতামূলক)
-                            <input type="file" id="regPic" accept="image/*" class="hidden" required onchange="previewImage(this)">
-                        </label>
-                        <input type="hidden" id="regPicBase64">
+                        <p class="text-xs text-gray-500">প্রোফাইল ছবি (বাধ্যতামূলক)</p>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <!-- Basic Info -->
-                        <div><label class="block text-sm font-medium mb-1">পূর্ণ নাম *</label><input type="text" id="regName" class="w-full p-3 border rounded-lg" required></div>
-                        <div><label class="block text-sm font-medium mb-1">ইমেইল *</label><input type="email" id="regEmail" class="w-full p-3 border rounded-lg" required></div>
-                        <div><label class="block text-sm font-medium mb-1">পাসওয়ার্ড *</label><input type="password" id="regPassword" class="w-full p-3 border rounded-lg" required minlength="6"></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium mb-1">রক্তের গ্রুপ *</label>
-                            <select id="regBlood" class="w-full p-3 border rounded-lg" required>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">পূর্ণ নাম *</label>
+                            <input type="text" id="reg-name" required class="w-full border border-gray-200 rounded-lg p-2 text-sm focus:ring-1 focus:ring-brand-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">ইমেইল ঠিকানা *</label>
+                            <input type="email" id="reg-email" required class="w-full border border-gray-200 rounded-lg p-2 text-sm focus:ring-1 focus:ring-brand-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">পাসওয়ার্ড * (লগইন করতে লাগবে)</label>
+                            <input type="password" id="reg-pass" required minlength="6" class="w-full border border-gray-200 rounded-lg p-2 text-sm focus:ring-1 focus:ring-brand-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">রক্তের গ্রুপ *</label>
+                            <select id="reg-bg" required class="w-full border border-gray-200 rounded-lg p-2 text-sm focus:ring-1 focus:ring-brand-500 outline-none">
                                 <option value="">নির্বাচন করুন</option>
-                                <option value="A+">A+</option><option value="A-">A-</option><option value="B+">B+</option><option value="B-">B-</option>
-                                <option value="O+">O+</option><option value="O-">O-</option><option value="AB+">AB+</option><option value="AB-">AB-</option>
+                                <option value="A+">A+</option><option value="A-">A-</option>
+                                <option value="B+">B+</option><option value="B-">B-</option>
+                                <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                                <option value="O+">O+</option><option value="O-">O-</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium mb-1">লিঙ্গ *</label>
-                            <select id="regGender" class="w-full p-3 border rounded-lg" required>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">লিঙ্গ *</label>
+                            <select id="reg-gender" required class="w-full border border-gray-200 rounded-lg p-2 text-sm focus:ring-1 focus:ring-brand-500 outline-none">
                                 <option value="">নির্বাচন করুন</option>
                                 <option value="Male">পুরুষ</option><option value="Female">মহিলা</option>
                             </select>
                         </div>
-                        
-                        <!-- Contact Info -->
-                        <div><label class="block text-sm font-medium mb-1">মোবাইল নাম্বার ১ *</label><input type="text" id="regPhone1" class="w-full p-3 border rounded-lg bg-gray-50" value="+880" required></div>
-                        <div><label class="block text-sm font-medium mb-1">মোবাইল নাম্বার ২ (ঐচ্ছিক)</label><input type="text" id="regPhone2" class="w-full p-3 border rounded-lg bg-gray-50" value="+880"></div>
-                        
-                        <!-- Address -->
-                        <div><label class="block text-sm font-medium mb-1">বিভাগ *</label><select id="regDivision" class="w-full p-3 border rounded-lg" required></select></div>
-                        <div><label class="block text-sm font-medium mb-1">জেলা *</label><select id="regDistrict" class="w-full p-3 border rounded-lg disabled:bg-gray-100" required disabled></select></div>
-                        <div class="md:col-span-2"><label class="block text-sm font-medium mb-1">বিস্তারিত ঠিকানা *</label><textarea id="regAddress" rows="2" class="w-full p-3 border rounded-lg" placeholder="আপনার এলাকার নাম, রাস্তা বা ল্যান্ডমার্ক লিখুন" required></textarea></div>
-                        
-                        <!-- Medical Info -->
-                        <div class="md:col-span-2 bg-yellow-50 p-4 rounded-lg border border-yellow-200">
-                            <p class="font-bold text-yellow-800 mb-3 text-sm"><i class="fa-solid fa-stethoscope mr-1"></i> স্বাস্থ্য সম্পর্কিত তথ্য (সঠিক উত্তর দিন)</p>
-                            <div class="mb-3">
-                                <label class="block text-sm mb-1">আপনি কি নিয়মিত ধূমপান বা মদ্যপান করেন?</label>
-                                <div class="flex gap-4">
-                                    <label><input type="radio" name="regSmoker" value="Yes" required> হ্যাঁ</label>
-                                    <label><input type="radio" name="regSmoker" value="No"> না</label>
-                                </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">মোবাইল নাম্বার ১ *</label>
+                            <div class="flex">
+                                <span class="inline-flex items-center px-3 text-sm text-gray-500 bg-gray-100 border border-r-0 border-gray-200 rounded-l-lg">+880</span>
+                                <input type="tel" id="reg-phone1" required pattern="[0-9]{10}" placeholder="17XXXXXXXX" class="w-full border border-gray-200 rounded-r-lg p-2 text-sm focus:ring-1 focus:ring-brand-500 outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">মোবাইল নাম্বার ২ (ঐচ্ছিক)</label>
+                            <div class="flex">
+                                <span class="inline-flex items-center px-3 text-sm text-gray-500 bg-gray-100 border border-r-0 border-gray-200 rounded-l-lg">+880</span>
+                                <input type="tel" id="reg-phone2" pattern="[0-9]{10}" placeholder="19XXXXXXXX" class="w-full border border-gray-200 rounded-r-lg p-2 text-sm focus:ring-1 focus:ring-brand-500 outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">বিভাগ *</label>
+                            <select id="reg-div" onchange="populateRegDistricts()" required class="w-full border border-gray-200 rounded-lg p-2 text-sm focus:ring-1 focus:ring-brand-500 outline-none"></select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">জেলা *</label>
+                            <select id="reg-dist" required class="w-full border border-gray-200 rounded-lg p-2 text-sm focus:ring-1 focus:ring-brand-500 outline-none"><option value="">আগে বিভাগ দিন</option></select>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">বিস্তারিত ঠিকানা * (আপনার মতো করে লিখুন)</label>
+                            <textarea id="reg-address" required rows="2" class="w-full border border-gray-200 rounded-lg p-2 text-sm focus:ring-1 focus:ring-brand-500 outline-none"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 p-4 rounded-lg mt-4 border border-blue-100">
+                        <p class="text-sm font-semibold text-blue-800 mb-2"><i class="fa-solid fa-stethoscope"></i> স্বাস্থ্য তথ্য</p>
+                        <div class="mb-2">
+                            <label class="block text-xs text-gray-700 mb-1">আপনি কি নিয়মিত ধূমপান বা মদ্যপান করেন? (তথ্যটি শুধুমাত্র জানার জন্য)</label>
+                            <div class="flex gap-4">
+                                <label class="text-sm flex items-center"><input type="radio" name="reg-smoker" value="Yes" required class="mr-1 accent-brand-600"> হ্যাঁ</label>
+                                <label class="text-sm flex items-center"><input type="radio" name="reg-smoker" value="No" class="mr-1 accent-brand-600"> না</label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-700 mb-1">আপনার কি এমন কোনো শারীরিক সমস্যা আছে যার কারণে রক্ত দিতে বাধা আছে?</label>
+                            <div class="flex gap-4">
+                                <label class="text-sm flex items-center"><input type="radio" name="reg-medical" value="Yes" required class="mr-1 accent-brand-600"> হ্যাঁ</label>
+                                <label class="text-sm flex items-center"><input type="radio" name="reg-medical" value="No" class="mr-1 accent-brand-600"> না</label>
+                            </div>
+                            <p class="text-[10px] text-gray-500 mt-1">বিঃদ্রঃ 'হ্যাঁ' দিলে অ্যাকাউন্ট তৈরি হবে, তবে স্বয়ংক্রিয়ভাবে ডিজেবল থাকবে।</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 flex items-start">
+                        <input type="checkbox" id="reg-consent" required class="mt-1 mr-2 accent-brand-600">
+                        <label for="reg-consent" class="text-xs text-gray-600">আমি সম্মতি দিচ্ছি যে আমার প্রদত্ত সকল তথ্য ওয়েবসাইটের পাবলিক প্রোফাইলে প্রদর্শিত হবে যাতে প্রয়োজনে মানুষ আমার সাথে যোগাযোগ করতে পারে।</label>
+                    </div>
+
+                    <button type="submit" class="w-full bg-brand-600 text-white font-medium rounded-lg p-2.5 text-sm mt-4 hover:bg-brand-700 transition">অ্যাকাউন্ট তৈরি করুন</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- SECTION: OTP VERIFICATION -->
+        <section id="otp-verify" class="page-section">
+            <div class="max-w-md mx-auto bg-white rounded-2xl p-6 premium-shadow text-center">
+                <i class="fa-solid fa-envelope-open-text text-4xl text-brand-500 mb-4"></i>
+                <h2 class="text-xl font-bold mb-2">ইমেইল ভেরিফিকেশন</h2>
+                <p class="text-sm text-gray-500 mb-6" id="otp-email-text">আপনার ইমেইলে একটি কোড পাঠানো হয়েছে।</p>
+                
+                <form id="otp-form" class="space-y-4">
+                    <input type="text" id="otp-code" required placeholder="6-digit OTP" class="w-full border border-gray-200 rounded-lg p-3 text-center text-lg tracking-widest focus:ring-2 focus:ring-brand-500 outline-none">
+                    <button type="submit" class="w-full bg-brand-600 text-white font-medium rounded-lg p-2.5 text-sm hover:bg-brand-700 transition">ভেরিফাই করুন</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- SECTION: LOGIN -->
+        <section id="login" class="page-section">
+            <div class="max-w-md mx-auto bg-white rounded-2xl p-6 sm:p-8 premium-shadow mt-10">
+                <div class="text-center mb-6">
+                    <i class="fa-solid fa-user-circle text-4xl text-gray-300 mb-2"></i>
+                    <h2 class="text-xl font-bold">লগইন করুন</h2>
+                </div>
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">ইমেইল</label>
+                        <input type="email" id="login-email" required class="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-1 focus:ring-brand-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">পাসওয়ার্ড</label>
+                        <input type="password" id="login-pass" required class="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-1 focus:ring-brand-500 outline-none">
+                    </div>
+                    <button type="submit" class="w-full bg-brand-600 text-white font-medium rounded-lg p-2.5 text-sm mt-2 hover:bg-brand-700 transition">প্রবেশ করুন</button>
+                </form>
+                <div class="text-center mt-4">
+                    <p class="text-xs text-gray-500">অ্যাকাউন্ট নেই? <a href="#register" class="text-brand-600 font-bold hover:underline">যুক্ত হোন</a></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: USER PROFILE (Dashboard) -->
+        <section id="profile" class="page-section">
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-white rounded-2xl p-6 premium-shadow mb-6 flex items-center gap-4">
+                    <img id="prof-pic" src="" class="w-20 h-20 rounded-full object-cover border-2 border-brand-100">
+                    <div>
+                        <h2 id="prof-name" class="text-xl font-bold text-gray-900"></h2>
+                        <p id="prof-bg" class="text-sm font-semibold text-brand-600 bg-brand-50 inline-block px-2 py-0.5 rounded"></p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 premium-shadow mb-6">
+                    <h3 class="text-base font-bold border-b pb-2 mb-4"><i class="fa-solid fa-clock-rotate-left text-gray-400"></i> রক্তদানের তথ্য যুক্ত করুন</h3>
+                    <form id="donation-form" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">রক্তদানের তারিখ</label>
+                                <input type="date" id="don-date" required class="w-full border border-gray-200 rounded-lg p-2 text-sm focus:ring-1 focus:ring-brand-500 outline-none">
                             </div>
                             <div>
-                                <label class="block text-sm mb-1 text-red-800 font-medium">আপনার কি এমন কোনো বড় রোগ আছে যা রক্তদানে বাধা হতে পারে? (যেমন: হেপাটাইটিস, ক্যান্সার, এইডস, অ্যাজমা ইত্যাদি)</label>
-                                <div class="flex gap-4">
-                                    <label><input type="radio" name="regDisease" value="Yes" required> হ্যাঁ</label>
-                                    <label><input type="radio" name="regDisease" value="No"> না</label>
-                                </div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">হাসপাতাল/স্থান</label>
+                                <input type="text" id="don-hosp" required class="w-full border border-gray-200 rounded-lg p-2 text-sm focus:ring-1 focus:ring-brand-500 outline-none">
                             </div>
                         </div>
-
-                        <!-- Terms -->
-                        <div class="md:col-span-2">
-                            <label class="flex items-start gap-2 text-sm text-gray-600">
-                                <input type="checkbox" required class="mt-1">
-                                <span>আমি <a href="#terms" class="text-red-600 underline">শর্তাবলী</a> ও <a href="#privacy" class="text-red-600 underline">প্রাইভেসি পলিসি</a> মেনে নিচ্ছি এবং স্বীকার করছি যে আমার দেওয়া তথ্য ওয়েবসাইটে পাবলিক করা হবে।</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="w-full bg-red-600 text-white font-bold py-3.5 rounded-lg shadow-md hover:bg-red-700 transition">অ্যাকাউন্ট তৈরি করুন</button>
-                </form>
-
-                <!-- OTP Section (Hidden initially) -->
-                <div id="otpSection" class="p-8 hidden text-center">
-                    <i class="fa-solid fa-envelope-open-text text-5xl text-gray-300 mb-4"></i>
-                    <h3 class="text-xl font-bold mb-2">ইমেইল ভেরিফিকেশন</h3>
-                    <p class="text-sm text-gray-500 mb-6">আপনার ইমেইলে একটি ৬-ডিজিটের কোড পাঠানো হয়েছে।</p>
-                    <input type="text" id="otpInput" class="w-full max-w-xs mx-auto text-center text-2xl tracking-[0.5em] p-3 border-2 border-red-200 rounded-lg focus:border-red-600 mb-4" maxlength="6" placeholder="------">
-                    <button onclick="verifyOTP()" class="w-full max-w-xs bg-red-600 text-white font-bold py-3 rounded-lg shadow-md hover:bg-red-700 transition">ভেরিফাই করুন</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- LOGIN PAGE -->
-        <section id="login" class="page-section">
-            <div class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-                <div class="text-center mb-8">
-                    <div class="w-16 h-16 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fa-solid fa-user-lock"></i></div>
-                    <h2 class="text-2xl font-bold">লগইন করুন</h2>
-                </div>
-                <form id="loginForm" class="space-y-5">
-                    <div><label class="block text-sm font-medium mb-1">ইমেইল</label><input type="email" id="loginEmail" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-red-500" required></div>
-                    <div><label class="block text-sm font-medium mb-1">পাসওয়ার্ড</label><input type="password" id="loginPassword" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-red-500" required></div>
-                    <button type="submit" class="w-full bg-red-600 text-white font-bold py-3.5 rounded-lg shadow-md hover:bg-red-700 transition">লগইন</button>
-                </form>
-                <p class="text-center mt-6 text-sm text-gray-600">অ্যাকাউন্ট নেই? <a href="#register" class="text-red-600 font-bold hover:underline">ডোনার হোন</a></p>
-            </div>
-        </section>
-
-        <!-- DASHBOARD PAGE -->
-        <section id="dashboard" class="page-section">
-            <div class="max-w-4xl mx-auto">
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6 flex flex-col md:flex-row items-center gap-6">
-                    <img id="dashPic" src="" class="w-24 h-24 rounded-full border-4 border-red-100 object-cover">
-                    <div class="text-center md:text-left flex-1">
-                        <h2 id="dashName" class="text-2xl font-bold text-gray-900"></h2>
-                        <p class="text-gray-500"><i class="fa-solid fa-droplet text-red-600 mr-1"></i> <span id="dashBlood"></span> | <span id="dashGender"></span></p>
-                    </div>
-                    <div id="dashEligibility" class="px-4 py-2 rounded-lg text-sm font-bold text-center border">
-                        <!-- Eligibility injected here -->
-                    </div>
-                </div>
-
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <h3 class="text-lg font-bold mb-4 border-b pb-2"><i class="fa-solid fa-plus-circle text-red-600 mr-2"></i>নতুন রক্তদানের তথ্য যুক্ত করুন</h3>
-                    <form id="donationForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div><label class="block text-sm mb-1">তারিখ</label><input type="date" id="donDate" class="w-full p-3 border rounded-lg" required></div>
-                        <div><label class="block text-sm mb-1">হাসপাতালের নাম</label><input type="text" id="donHospital" class="w-full p-3 border rounded-lg" required></div>
-                        <div class="md:col-span-2"><label class="block text-sm mb-1">রোগীর বিবরণ / নোট (ঐচ্ছিক)</label><input type="text" id="donNote" class="w-full p-3 border rounded-lg"></div>
-                        <div class="md:col-span-2">
-                            <button type="submit" class="bg-gray-900 text-white px-6 py-2.5 rounded-lg hover:bg-black transition">তথ্য সংরক্ষণ করুন</button>
-                        </div>
+                        <button type="submit" class="bg-gray-800 text-white font-medium rounded-lg px-4 py-2 text-sm hover:bg-gray-900 transition">সংরক্ষণ করুন</button>
                     </form>
                 </div>
+
+                <div class="bg-white rounded-2xl p-6 premium-shadow">
+                    <h3 class="text-base font-bold border-b pb-2 mb-4"><i class="fa-solid fa-list text-gray-400"></i> আপনার রক্তদানের ইতিহাস</h3>
+                    <div id="prof-history" class="space-y-3">
+                        <p class="text-xs text-gray-500">লোড হচ্ছে...</p>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- STATIC PAGES -->
-        <section id="about" class="page-section max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-            <h2 class="text-2xl font-bold text-red-600 mb-6 border-b pb-2">আমাদের সম্পর্কে</h2>
-            <div class="prose prose-red text-gray-700 leading-relaxed">
-                <p><strong>হিতৈষী</strong> হলো বাংলাদেশের একটি প্রিমিয়াম এবং স্বেচ্ছাসেবী রক্তদান নেটওয়ার্ক। আমাদের মূল লক্ষ্য হলো রক্তদাতা এবং রক্তগ্রহীতার মধ্যে একটি দ্রুত ও নিরাপদ সেতুবন্ধন তৈরি করা।</p>
-                <h3 class="text-lg font-bold mt-6 mb-2">আমাদের লক্ষ্য:</h3>
-                <ul class="list-disc pl-5 space-y-2">
-                    <li>জরুরি মুহূর্তে রক্তের অভাব দূর করা।</li>
-                    <li>রক্তদাতাদের একটি আধুনিক ও সুসংগঠিত ডাটাবেস তৈরি করা।</li>
-                    <li>রক্তদানে মানুষকে উৎসাহিত করা।</li>
-                </ul>
-                <h3 class="text-lg font-bold mt-6 mb-2">ডেভেলপার টিম:</h3>
-                <p>এই প্রজেক্টটি ডেভেলপ করা হয়েছে সর্বাধুনিক টেকনোলজি ব্যবহার করে যাতে ব্যবহারকারীরা একটি অ্যাপের মতো স্মুথ অভিজ্ঞতা পান। আমাদের ডেডিকেটেড টিম সবসময় এর মান উন্নয়নে কাজ করে যাচ্ছে।</p>
+        <!-- SECTION: PUBLIC PROFILE (Viewed by seekers) -->
+        <section id="public-profile" class="page-section">
+            <div class="max-w-2xl mx-auto bg-white rounded-2xl p-6 premium-shadow text-center relative">
+                <button onclick="navigateTo('home')" class="absolute top-4 left-4 text-gray-400 hover:text-gray-800"><i class="fa-solid fa-arrow-left"></i> ব্যাক</button>
+                
+                <img id="pub-pic" src="" class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg mx-auto mb-3 mt-4">
+                <h2 id="pub-name" class="text-xl font-bold text-gray-900"></h2>
+                <p class="text-sm font-semibold text-brand-600 mb-2"><i class="fa-solid fa-droplet"></i> <span id="pub-bg"></span></p>
+                
+                <div id="pub-eligibility" class="text-xs inline-block px-3 py-1 rounded-full font-medium mb-4"></div>
+
+                <div class="bg-gray-50 rounded-lg p-4 text-left text-sm text-gray-700 space-y-2 mb-6">
+                    <p><i class="fa-solid fa-location-dot w-5 text-gray-400"></i> <span id="pub-address"></span></p>
+                    <p><i class="fa-solid fa-phone w-5 text-gray-400"></i> <a id="pub-phone" href="#" class="text-brand-600 font-bold"></a></p>
+                    <p><i class="fa-solid fa-phone w-5 text-gray-400"></i> <a id="pub-phone2" href="#" class="text-brand-600 font-bold"></a></p>
+                </div>
+
+                <!-- Reviews Section -->
+                <div class="text-left mt-6 border-t pt-4">
+                    <h3 class="text-sm font-bold mb-3">মতামত (Reviews)</h3>
+                    <div id="pub-reviews-list" class="space-y-2 mb-4 text-xs"></div>
+                    
+                    <div class="bg-brand-50 p-3 rounded-lg border border-brand-100">
+                        <p class="text-xs font-semibold mb-2">এই ডোনার থেকে রক্ত গ্রহণ করেছেন? মতামত দিন:</p>
+                        <input type="text" id="rev-name" placeholder="আপনার নাম" class="w-full text-xs p-2 rounded border border-gray-200 mb-2 outline-none">
+                        <textarea id="rev-comment" placeholder="আপনার মতামত লিখুন..." rows="2" class="w-full text-xs p-2 rounded border border-gray-200 mb-2 outline-none"></textarea>
+                        <button onclick="submitReview()" class="bg-brand-600 text-white text-xs px-3 py-1.5 rounded hover:bg-brand-700">সাবমিট</button>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section id="faq" class="page-section max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-            <h2 class="text-2xl font-bold text-red-600 mb-6 border-b pb-2">সাধারণ প্রশ্ন (FAQ)</h2>
-            <div class="space-y-4">
-                <details class="group border border-gray-200 rounded-lg p-4 cursor-pointer bg-gray-50">
-                    <summary class="font-bold text-gray-800 list-none flex justify-between">কে কে রক্ত দিতে পারবেন? <i class="fa-solid fa-chevron-down group-open:rotate-180 transition"></i></summary>
-                    <p class="mt-3 text-sm text-gray-600">যেকোনো সুস্থ ব্যক্তি, যার বয়স ১৮-৬০ বছরের মধ্যে এবং ওজন কমপক্ষে ৫০ কেজি, তিনি রক্ত দিতে পারবেন। পুরুষরা প্রতি ৩ মাস এবং নারীরা প্রতি ৪ মাস অন্তর রক্ত দিতে পারেন।</p>
-                </details>
-                <details class="group border border-gray-200 rounded-lg p-4 cursor-pointer bg-gray-50">
-                    <summary class="font-bold text-gray-800 list-none flex justify-between">অ্যাকাউন্ট তৈরি কি বাধ্যতামূলক? <i class="fa-solid fa-chevron-down group-open:rotate-180 transition"></i></summary>
-                    <p class="mt-3 text-sm text-gray-600">রক্ত খোঁজার জন্য কোনো অ্যাকাউন্টের প্রয়োজন নেই। তবে আপনি যদি ডোনার হিসেবে যুক্ত হতে চান, তবে আপনাকে অ্যাকাউন্ট তৈরি করতে হবে।</p>
-                </details>
+        <!-- SECTION: FUNDING (Donations to site) -->
+        <section id="donors" class="page-section">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-8 pt-4">
+                    <h1 class="text-2xl font-bold text-gray-900 mb-2">আমাদের আর্থিক সাহায্যকারীগণ</h1>
+                    <p class="text-sm text-gray-500">ওয়েবসাইটটি সচল রাখতে যারা আমাদের সাহায্য করেছেন।</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Form -->
+                    <div class="bg-white p-6 rounded-2xl premium-shadow">
+                        <h3 class="font-bold text-base mb-4"><i class="fa-solid fa-hand-holding-dollar text-brand-600"></i> অনুদান দিন</h3>
+                        <p class="text-xs text-gray-600 mb-4">বিকাশ নাম্বার: <b>+880 1701-572857</b> (Send Money)</p>
+                        <form id="fund-form" class="space-y-3">
+                            <input type="text" id="fund-name" required placeholder="আপনার নাম" class="w-full border border-gray-200 rounded-lg p-2 text-sm outline-none">
+                            <input type="text" id="fund-phone" required placeholder="আপনার মোবাইল নাম্বার" class="w-full border border-gray-200 rounded-lg p-2 text-sm outline-none">
+                            <input type="text" id="fund-trx" required placeholder="bKash Transaction ID (TrxID)" class="w-full border border-gray-200 rounded-lg p-2 text-sm outline-none">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="fund-anon" class="mr-2 accent-brand-600">
+                                <label for="fund-anon" class="text-xs text-gray-600">আমার নাম ও ছবি গোপন রাখুন (Anonymous হিসেবে দেখাবে)</label>
+                            </div>
+                            <button type="submit" class="w-full bg-brand-600 text-white font-medium rounded-lg p-2 text-sm hover:bg-brand-700">সাবমিট করুন</button>
+                        </form>
+                    </div>
+                    
+                    <!-- List -->
+                    <div class="bg-white p-6 rounded-2xl premium-shadow">
+                        <h3 class="font-bold text-base mb-4">সম্মানিত দাতা তালিকা</h3>
+                        <div id="fund-list" class="space-y-2 max-h-64 overflow-y-auto pr-2">
+                            <p class="text-xs text-gray-500">লোড হচ্ছে...</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
-        
-        <section id="privacy" class="page-section max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-            <h2 class="text-2xl font-bold text-red-600 mb-6 border-b pb-2">প্রাইভেসি পলিসি</h2>
-            <p class="text-gray-700">হিতৈষী একটি পাবলিক প্ল্যাটফর্ম। ডোনার হিসেবে রেজিস্ট্রেশন করার সময় আপনি যে সকল তথ্য প্রদান করবেন (নাম, ছবি, নাম্বার, ঠিকানা) তা মানুষের উপকারের স্বার্থে ওয়েবসাইটে উন্মুক্ত থাকবে। আমরা আপনার পাসওয়ার্ড বাদে বাকি তথ্য ওয়েবসাইট ব্যবহারকারীদের দেখাতে বাধ্য।</p>
+
+        <!-- SECTION: ABOUT -->
+        <section id="about" class="page-section max-w-5xl mx-auto bg-white p-8 rounded-3xl premium-shadow space-y-12">
+            <!-- Header & Mission/Vision -->
+            <div class="text-center space-y-4">
+                <h2 class="text-3xl font-bold text-brand-600 border-b-4 border-brand-100 inline-block pb-2">আমাদের সম্পর্কে (About Us)</h2>
+                <p class="text-base text-gray-700 leading-relaxed max-w-3xl mx-auto italic">
+                    "হিতৈষী একটি অলাভজনক রক্তদান নেটওয়ার্ক। আমাদের উদ্দেশ্য হলো রক্তদাতা এবং গ্রহীতার মাঝে একটি দ্রুত এবং নিরাপদ সেতুবন্ধন তৈরি করা।"
+                </p>
+            </div>
+
+            <!-- Mission & Vision Grid -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="p-6 bg-brand-50 rounded-2xl border border-brand-100">
+                    <h3 class="text-xl font-bold text-brand-700 mb-3 flex items-center">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> আমাদের মিশন (Mission)
+                    </h3>
+                    <p class="text-sm text-gray-600">প্রযুক্তির সঠিক ব্যবহারের মাধ্যমে জরুরি প্রয়োজনে মুহূর্তের মধ্যে রক্তদাতার সন্ধান নিশ্চিত করা এবং স্বেচ্ছায় রক্তদানে উদ্বুদ্ধ করা।</p>
+                </div>
+                <div class="p-6 bg-brand-50 rounded-2xl border border-brand-100">
+                    <h3 class="text-xl font-bold text-brand-700 mb-3 flex items-center">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>                        আমাদের ভিশন (Vision)
+                    </h3>
+                    <p class="text-sm text-gray-600">একটি রক্তশূন্যতাহীন সমাজ গঠন করা যেখানে রক্তের অভাবে কোনো প্রাণ ঝরবে না এবং প্রতিটি নাগরিক রক্তদানকে সামাজিক দায়িত্ব মনে করবেন।</p>
+                </div>
+            </div>
+
+            <!-- Leadership Section (Founder & Co-Founder) -->
+            <div class="space-y-6">
+                <h3 class="text-2xl font-bold text-gray-800 text-center">নেতৃত্বে (Leadership)</h3>
+                <div class="grid sm:grid-cols-2 gap-8">
+                    <!-- Founder -->
+                    <div class="flex flex-col items-center p-6 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-4 border-brand-500">
+                            <img src="https://ui-avatars.com/api/?name=Aditya&background=ef4444&color=fff" alt="Founder" class="w-full h-full object-cover">
+                        </div>
+                        <h4 class="text-lg font-bold">Aditya Banerjee</h4>
+                        <p class="text-brand-600 font-medium text-sm">Founder and Developer</p>
+                        <p class="text-xs text-gray-500 text-center mt-2 px-4">সামাজিক পরিবর্তনের লক্ষ্যে হিতৈষীর ভিত্তিপ্রস্তর স্থাপন করেন।</p>
+                        <a href="https://aditya.pages.dev/" target="_blank" class="mt-3 text-xs bg-brand-600 text-white px-4 py-2 rounded-full hover:bg-brand-700 transition">Portfolio</a>
+                    </div>
+                    <!-- Co-Founder -->
+                    <div class="flex flex-col items-center p-6 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-4 border-brand-200">
+                            <img src="https://ui-avatars.com/api/?name=Arko&background=4b5563&color=fff" alt="Co-Founder" class="w-full h-full object-cover">
+                        </div>
+                        <h4 class="text-lg font-bold">Nabo Kumar Sarkar</h4>
+                        <p class="text-brand-600 font-medium text-sm">Co-Founder and Develope</p>
+                        <p class="text-xs text-gray-500 text-center mt-2 px-4">নেটওয়ার্ক অপারেশন ও কমিউনিটি বিল্ডিংয়ের দায়িত্বে নিয়োজিত।</p>
+                        <a href="https://nabokumar.pages.dev/" target="_blank" class="mt-3 text-xs bg-gray-800 text-white px-4 py-2 rounded-full hover:bg-black transition">Portfolio</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Investor / Club Donation Info -->
+            <div class="bg-gray-900 text-white p-8 rounded-2xl relative overflow-hidden">
+                <div class="relative z-10">
+                    <h3 class="text-xl font-bold mb-4 flex items-center">
+                        <span class="p-2 bg-brand-600 rounded-lg mr-3">💰</span>ইনভেস্টর 
+                    </h3>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        হিতৈষী মূলত সহৃদয় ব্যক্তিদের আর্থিক সহযোগিতায় পরিচালিত হয়।
+                    </p>
+                    <div class="mt-6 flex flex-wrap gap-4 items-center">
+                        <div class="flex items-center space-x-2">
+                            <img src="https://ui-avatars.com/api/?name=Club+Investor&background=ffd700&color=000" class="w-13 h-13 rounded-full border-2 border-white">
+                            <span class="text-xs font-semibold">প্রধান ইনভেস্টর: ADITYA'S BROTHER</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute top-0 right-0 w-32 h-32 bg-brand-600 opacity-10 rounded-full -mr-16 -mt-16"></div>
+            </div>
+
+            <!-- Developer Team -->
+            <div class="space-y-6">
+                <h3 class="text-2xl font-bold text-gray-800 text-center">ডেভেলপার টিম (Dev Team)</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <!-- Individual Dev 1 -->
+                    <div class="p-4 bg-white border border-gray-100 rounded-xl text-center hover:bg-brand-50 transition-colors">
+                        <img src="https://ui-avatars.com/api/?name=Dev+1&background=random" class="w-12 h-12 rounded-full mx-auto mb-2">
+                        <h5 class="text-sm font-bold">Aditya</h5>
+                        <p class="text-[10px] text-gray-500 uppercase">Frontend Dev</p>
+                    </div>
+                    <!-- Individual Dev 2 -->
+                    <div class="p-4 bg-white border border-gray-100 rounded-xl text-center hover:bg-brand-50 transition-colors">
+                        <img src="https://ui-avatars.com/api/?name=Dev+2&background=random" class="w-12 h-12 rounded-full mx-auto mb-2">
+                        <h5 class="text-sm font-bold">Samiul</h5>
+                        <p class="text-[10px] text-gray-500 uppercase">Backend Dev</p>
+                    </div>
+                    <!-- Individual Dev 3 -->
+                    <div class="p-4 bg-white border border-gray-100 rounded-xl text-center hover:bg-brand-50 transition-colors">
+                        <img src="https://ui-avatars.com/api/?name=Dev+3&background=random" class="w-12 h-12 rounded-full mx-auto mb-2">
+                        <h5 class="text-sm font-bold">Nabo</h5>
+                        <p class="text-[10px] text-gray-500 uppercase">UI/UX Designer</p>
+                    </div>
+                    <!-- Individual Dev 4 -->
+                    <div class="p-4 bg-white border border-gray-100 rounded-xl text-center hover:bg-brand-50 transition-colors">
+                        <img src="https://ui-avatars.com/api/?name=Dev+4&background=random" class="w-12 h-12 rounded-full mx-auto mb-2">
+                        <h5 class="text-sm font-bold">Sakib</h5>
+                        <p class="text-[10px] text-gray-500 uppercase">Testing</p>
+                    </div>
+                </div>
+                <p class="text-center text-xs text-gray-400 mt-4">সহযোগিতায়: HIJIBIJI</p>
+            </div>
+        </section>
+		
+		
+		<!-- SECTION: FAQ -->
+		<section id="faq" class="page-section max-w-3xl mx-auto bg-white p-6 rounded-2xl premium-shadow">
+            <h2 class="text-xl font-bold border-b pb-2 mb-6 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-brand-600"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>                সাধারণ জিজ্ঞাসা (FAQ)
+            </h2>
+
+            <div class="space-y-4 text-sm text-gray-700">
+                <!-- FAQ Item 1 -->
+                <div class="group border border-gray-100 rounded-xl p-4 hover:bg-brand-50 transition-all duration-300">
+                    <p class="font-bold text-gray-900 mb-1 flex items-start gap-2">
+                        <span class="text-brand-600">প্র:</span> রক্তদান করতে কি অ্যাকাউন্ট লাগবে?
+                    </p>
+                    <p class="pl-6 text-gray-600 leading-relaxed">
+                        <span class="font-semibold text-green-600">উ:</span> হ্যাঁ, ডোনার হিসেবে নিজেকে তালিকাভুক্ত করতে এবং আপনার তথ্য আপডেট রাখতে একটি অ্যাকাউন্ট তৈরি করা প্রয়োজন।
+                    </p>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="group border border-gray-100 rounded-xl p-4 hover:bg-brand-50 transition-all duration-300">
+                    <p class="font-bold text-gray-900 mb-1 flex items-start gap-2">
+                        <span class="text-brand-600">প্র:</span> রক্ত খুঁজতে কি লগইন করতে হবে?
+                    </p>
+                    <p class="pl-6 text-gray-600 leading-relaxed">
+                        <span class="font-semibold text-green-600">উ:</span> না, রক্ত খোঁজার জন্য লগইন করার প্রয়োজন নেই। যে কেউ হোমপেজ থেকে সরাসরি সার্চ করে ডোনারদের সাথে যোগাযোগ করতে পারবেন।
+                    </p>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="group border border-gray-100 rounded-xl p-4 hover:bg-brand-50 transition-all duration-300">
+                    <p class="font-bold text-gray-900 mb-1 flex items-start gap-2">
+                        <span class="text-brand-600">প্র:</span> কতদিন পর পর রক্ত দেওয়া যায়?
+                    </p>
+                    <p class="pl-6 text-gray-600 leading-relaxed">
+                        <span class="font-semibold text-green-600">উ:</span> সাধারণত সুস্থ পুরুষরা প্রতি ৯০ দিন (৩ মাস) এবং মহিলারা ১২০ দিন (৪ মাস) অন্তর নিরাপদভাবে রক্তদান করতে পারেন।
+                    </p>
+                </div>
+
+                <!-- FAQ Item 4 (Added for completeness) -->
+                <div class="group border border-gray-100 rounded-xl p-4 hover:bg-brand-50 transition-all duration-300">
+                    <p class="font-bold text-gray-900 mb-1 flex items-start gap-2">
+                        <span class="text-brand-600">প্র:</span> রক্তদানের পর কি কোনো পার্শ্বপ্রতিক্রিয়া হয়?
+                    </p>
+                    <p class="pl-6 text-gray-600 leading-relaxed">
+                        <span class="font-semibold text-green-600">উ:</span> রক্তদান একটি সম্পূর্ণ নিরাপদ প্রক্রিয়া। রক্তদানের পর পর্যাপ্ত পানি পান এবং কিছুক্ষণ বিশ্রাম নিলে কোনো সমস্যা হয় না।
+                    </p>
+                </div>
+            </div>
         </section>
 
-        <section id="terms" class="page-section max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-            <h2 class="text-2xl font-bold text-red-600 mb-6 border-b pb-2">শর্তাবলী ও গাইডলাইন</h2>
-            <ul class="list-decimal pl-5 space-y-2 text-gray-700">
-                <li>ভুল তথ্য দিয়ে অ্যাকাউন্ট তৈরি করা সম্পূর্ণ নিষিদ্ধ।</li>
-                <li>মেডিকেল হিস্ট্রি (রোগ, সমস্যা) লুকানো অপরাধ। এর জন্য আপনার অ্যাকাউন্ট ডিজেবল করে দেওয়া হবে।</li>
-                <li>রক্তদানের পর ওয়েবসাইটে তথ্য আপডেট রাখা আপনার নৈতিক দায়িত্ব।</li>
-                <li>অ্যাডমিন যেকোনো সময় কোনো কারণ দর্শানো ছাড়াই অ্যাকাউন্ট বাতিল করার ক্ষমতা রাখেন।</li>
-            </ul>
+
+        <!-- SECTION: Privacy & Policy -->
+		<section id="policy" class="page-section max-w-3xl mx-auto bg-white p-6 rounded-2xl premium-shadow">
+    <h2 class="text-xl font-bold border-b pb-2 mb-4 text-brand-600">প্রাইভেসি পলিসি ও শর্তাবলী</h2>
+    <div class="text-sm text-gray-700 space-y-4 leading-relaxed">
+        <div class="space-y-2">
+            <p class="font-bold text-gray-900">১. তথ্যের ব্যবহার ও দৃশ্যমানতা:</p>
+            <p>আপনি একজন স্বেচ্ছাসেবী রক্তদাতা হিসেবে নিবন্ধন করলে আপনার দেওয়া নাম, রক্তের গ্রুপ, মোবাইল নম্বর, বর্তমান ঠিকানা এবং ছবি আমাদের পাবলিক ডাটাবেসে সংরক্ষিত হবে। রক্তপ্রার্থী বা অন্য ব্যবহারকারীরা জরুরি প্রয়োজনে সরাসরি আপনার সাথে যোগাযোগ করার জন্য এই তথ্যগুলো দেখতে পাবেন।</p>
+        </div>
+
+        <div class="space-y-2">
+            <p class="font-bold text-gray-900">২. দায়বদ্ধতা ও নিরাপত্তা:</p>
+            <p>আমাদের প্ল্যাটফর্মটি শুধুমাত্র রক্তদাতা এবং রক্তগ্রহীতার মধ্যে একটি সেতুবন্ধন হিসেবে কাজ করে। রক্তদানের পূর্বে বা পরে কোনো প্রকার শারীরিক জটিলতা, অনাকাঙ্ক্ষিত দুর্ঘটনা বা কোনো প্রকার আর্থিক লেনদেনের জন্য এই প্ল্যাটফর্ম বা এর কর্তৃপক্ষ কোনোভাবেই দায়ী থাকবে না। আমরা রক্তদাতাদের কোনো আর্থিক সুবিধার বিনিময়ে রক্তদান না করার অনুরোধ জানাই।</p>
+        </div>
+
+        <div class="space-y-2">
+            <p class="font-bold text-gray-900">৩. রক্তদাতার স্বাস্থ্য ও গাইডলাইন:</p>
+            <p>রক্তদানের পূর্বে দাতার শারীরিক সুস্থতা নিশ্চিত করা গ্রহীতার দায়িত্ব। দাতার কোনো ক্রনিক রোগ বা মেডিকেল কন্ডিশন গোপন করে রক্তদান করা অনৈতিক এবং আইনত দণ্ডনীয়। প্রতিটি রক্তদানের মাঝে অন্তত ৪ মাস বা ১২০ দিনের ব্যবধান বজায় রাখা বাধ্যতামূলক।</p>
+        </div>
+
+        <div class="space-y-2">
+            <p class="font-bold text-gray-900">৪. তথ্যের সত্যতা ও অ্যাকাউন্ট বাতিল:</p>
+            <p>ভুল বা মিথ্যা তথ্য প্রদান করে নিবন্ধন করা হলে কর্তৃপক্ষ কোনো পূর্ব ঘোষণা ছাড়াই আপনার প্রোফাইলটি স্থায়ীভাবে মুছে ফেলার অধিকার সংরক্ষণ করে। এছাড়া কোনো দাতার বিরুদ্ধে যদি হয়রানি বা অসংলগ্ন আচরণের অভিযোগ পাওয়া যায়, তবে তার অ্যাকাউন্টটি ব্লক করা হবে।</p>
+        </div>
+
+        <div class="space-y-2 border-t pt-2 mt-4 text-xs italic text-gray-500">
+            <p>* এই প্ল্যাটফর্মটি ব্যবহার করার অর্থ হলো আপনি উপরের সকল শর্তাবলী মনোযোগ সহকারে পড়েছেন এবং মেনে নিয়েছেন।</p>
+        </div>
+    </div>
+</section>
+		
+		
+		
+		
+		<!-- SECTION: Terms and conditions (T&C) -->
+		<section id="terms" class="page-section max-w-3xl mx-auto bg-white p-6 rounded-2xl premium-shadow">
+            <h2 class="text-xl font-bold border-b pb-2 mb-4 text-brand-700 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        </svg> টার্মস ও কন্ডিশনস
+            </h2>
+
+            <div class="text-sm text-gray-700 space-y-4 leading-relaxed">
+                <!-- ১. তথ্যের ব্যবহার -->
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-1">১. তথ্য প্রকাশ ও গোপনীয়তা:</h3>
+                    <p>আপনি ডোনার হিসেবে যুক্ত হলে আপনার দেওয়া ব্যক্তিগত তথ্য যেমন— নাম, রক্তের গ্রুপ, ছবি, মোবাইল নাম্বার এবং বর্তমান ঠিকানা পাবলিক প্রোফাইলে প্রদর্শিত হবে। এটি শুধুমাত্র রক্ত গ্রহীতাদের সাহায্যের উদ্দেশ্যে ব্যবহার করা হবে। আমরা আপনার তথ্য
+                        কোনো তৃতীয় পক্ষের কাছে বিপণনের উদ্দেশ্যে প্রদান করি না।</p>
+                </div>
+
+                <!-- ২. প্ল্যাটফর্মের সীমাবদ্ধতা -->
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-1">২. দায়িত্ব ও সীমাবদ্ধতা:</h3>
+                    <p>আমরা শুধুমাত্র দাতা ও গ্রহীতার মাঝে একটি ডিজিটাল সেতুবন্ধন হিসেবে কাজ করি। রক্তদানের পর কোনো প্রকার শারীরিক সমস্যা, পার্শ্বপ্রতিক্রিয়া বা রক্ত আদান-প্রদান কেন্দ্রিক কোনো আর্থিক লেনদেনের দায়ভার কর্তৃপক্ষ গ্রহণ করবে না। দাতা ও গ্রহীতাকে
+                        পারস্পরিক বিশ্বাস ও নিজ দায়িত্বে সবকিছু যাচাই করে নেওয়ার পরামর্শ দেওয়া হচ্ছে।</p>
+                </div>
+
+                <!-- ৩. স্বাস্থ্যবিধি ও গাইডলাইন -->
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-1">৩. রক্তদান গাইডলাইন:</h3>
+                    <ul class="list-disc ml-5 space-y-1 text-gray-600">
+                        <li>শুধুমাত্র সুস্থ অবস্থায় এবং উপযুক্ত ওজন (ন্যূনতম ৪৫-৫০ কেজি) থাকলে রক্তদান করবেন।</li>
+                        <li>বিগত ৪ মাসের মধ্যে কোনো বড় অস্ত্রোপচার বা রক্ত গ্রহণ করে থাকলে রক্তদান থেকে বিরত থাকুন।</li>
+                        <li>হেপাটাইটিস, এইডস বা কোনো দীর্ঘমেয়াদী সংক্রামক রোগ থাকলে তথ্য গোপন করা আইনত দণ্ডনীয় ও অনৈতিক।</li>
+                    </ul>
+                </div>
+
+                <!-- ৪. নিরাপত্তা ও অপব্যবহার -->
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-1">৪. নিরাপত্তা ও অপব্যবহার:</h3>
+                    <p>রক্ত বিক্রির চেষ্টা করা বা গ্রহীতাকে হয়রানি করা কঠোরভাবে নিষিদ্ধ। কোনো ব্যবহারকারীর বিরুদ্ধে অভিযোগ প্রমাণিত হলে তার অ্যাকাউন্ট স্থায়ীভাবে বাতিল করা হবে এবং প্রয়োজনে আইনি ব্যবস্থা নেওয়া হতে পারে।</p>
+                </div>
+
+                <!-- ৫. তথ্যের আপডেট -->
+                <div class="bg-brand-50 p-3 rounded-lg border-l-4 border-brand-600 italic">
+                    <p class="text-xs text-brand-900">
+                        <b>নোট:</b> আপনি যেকোনো সময় আপনার প্রোফাইল তথ্য পরিবর্তন বা ডিলিট করতে পারেন। প্রতিবার রক্তদানের পর অন্তত ৩ মাস (৯০ দিন) বিরতি দেওয়া স্বাস্থ্যসম্মত।
+                    </p>
+                </div>
+            </div>
         </section>
+		
+		
+		
+		
+		<!-- SECTION: Guideline -->
+		<section id="guideline" class="page-section max-w-3xl mx-auto bg-white p-6 rounded-2xl premium-shadow">
+            <h2 class="text-xl font-bold border-b pb-2 mb-4 text-brand-600">রক্তদানের গাইডলাইন ও নিয়মাবলী</h2>
+
+            <div class="space-y-6 text-sm text-gray-700">
+                <!-- দাতা হওয়ার যোগ্যতা -->
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-2 flex items-center">
+                        <span class="w-2 h-2 bg-brand-500 rounded-full mr-2"></span> রক্তদাতার যোগ্যতা:
+                    </h3>
+                    <ul class="list-disc ml-5 space-y-1">
+                        <li>বয়স অবশ্যই ১৮ থেকে ৬০ বছরের মধ্যে হতে হবে।</li>
+                        <li>শরীরের ওজন কমপক্ষে ৫০ কেজি বা তার বেশি হতে হবে।</li>
+                        <li>রক্তচাপ এবং শরীরের তাপমাত্রা স্বাভাবিক থাকতে হবে।</li>
+                        <li>বিগত ৪ মাসের মধ্যে রক্ত প্রদান করেননি এমন ব্যক্তি।</li>
+                        <li>হিমোগ্লোবিনের মাত্রা পুরুষদের জন্য কমপক্ষে ১২.৫ এবং নারীদের জন্য ১২.০ হতে হবে।</li>
+                    </ul>
+                </div>
+
+                <!-- রক্তদানের আগে করণীয় -->
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-2 flex items-center">
+                        <span class="w-2 h-2 bg-brand-500 rounded-full mr-2"></span> রক্তদানের আগে করণীয়:
+                    </h3>
+                    <ul class="list-disc ml-5 space-y-1">
+                        <li>আগের রাতে পর্যাপ্ত ঘুম (কমপক্ষে ৭-৮ ঘণ্টা) নিশ্চিত করুন।</li>
+                        <li>রক্তদানের আগে হালকা পুষ্টিকর খাবার এবং পর্যাপ্ত পানি পান করুন।</li>
+                        <li>ধূমপান বা অ্যালকোহল সেবন থেকে বিরত থাকুন।</li>
+                        <li>আপনার যদি কোনো নির্দিষ্ট ওষুধ সেবনের ইতিহাস থাকে, তবে তা মেডিকেল টিমকে জানান।</li>
+                    </ul>
+                </div>
+
+                <!-- রক্তদানের পর করণীয় -->
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-2 flex items-center">
+                        <span class="w-2 h-2 bg-brand-500 rounded-full mr-2"></span> রক্তদানের পর করণীয়:
+                    </h3>
+                    <ul class="list-disc ml-5 space-y-1">
+                        <li>রক্তদানের পর অন্তত ১০-১৫ মিনিট বিশ্রাম নিন।</li>
+                        <li>পরবর্তী ২৪ ঘণ্টা প্রচুর পরিমাণে পানি ও তরল খাবার গ্রহণ করুন।</li>
+                        <li>যে হাত থেকে রক্ত নেওয়া হয়েছে, সেই হাতে ভারী কিছু তোলা বা ব্যায়াম করা থেকে বিরত থাকুন।</li>
+                        <li>মাথা ঘুরলে বা দুর্বল লাগলে সঙ্গে সঙ্গে শুয়ে পড়ুন এবং পা সামান্য উঁচুতে রাখুন।</li>
+                    </ul>
+                </div>
+
+                <!-- বিশেষ সতর্কতা -->
+                <div class="bg-brand-50 p-4 rounded-xl border border-brand-100">
+                    <h3 class="font-bold text-brand-700 mb-2 italic">বিশেষ সতর্কতা:</h3>
+                    <p class="text-xs leading-relaxed">
+                        আপনার যদি জন্ডিস, ম্যালেরিয়া, টাইফয়েড বা দীর্ঘমেয়াদী কোনো রোগ (যেমন: ডায়াবেটিস, উচ্চ রক্তচাপ) থাকে, তবে রক্তদানের আগে অবশ্যই চিকিৎসকের পরামর্শ নিন। মনে রাখবেন, আপনার সচেতনতা একজনের জীবন বাঁচাতে পারে।
+                    </p>
+                </div>
+            </div>
+        </section>
+		
+		
+		
+		
 
     </main>
 
-    <!-- Premium Footer -->
-    <footer class="bg-gray-900 text-gray-300 py-12 mt-auto border-t-4 border-red-600">
-        <div class="container mx-auto px-4 lg:px-8 max-w-7xl grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-8 mt-auto">
+        <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
             <div>
-                <a href="#home" class="flex items-center gap-2 mb-4 text-decoration-none">
-                    <i class="fa-solid fa-droplet text-red-600 text-2xl"></i>
-                    <span class="text-2xl font-bold text-white tracking-tight">হিতৈষী</span>
-                </a>
-                <p class="text-sm text-gray-400 mb-4">একটি স্মার্ট ও প্রফেশনাল রক্তদান নেটওয়ার্ক। মানুষের প্রয়োজনে, মানুষের পাশে।</p>
-                <div class="flex gap-4">
-                    <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-red-600 transition text-white"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-red-600 transition text-white"><i class="fa-brands fa-twitter"></i></a>
+                <h3 class="text-white text-lg font-bold mb-2"><i class="fa-solid fa-droplet text-brand-500"></i> হিতৈষী</h3>
+                <p class="text-xs text-gray-400">একটি প্রিমিয়াম ব্লাড ডোনেশন নেটওয়ার্ক। রক্ত দিন, জীবন বাঁচান।</p>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-2">প্রয়োজনীয় লিংক</h4>
+                <div class="flex flex-col space-y-1 text-xs">
+                    <a href="#about" class="hover:text-brand-400 transition">আমাদের সম্পর্কে</a>
+                    <a href="#faq" class="hover:text-brand-400 transition">সাধারণ জিজ্ঞাসা</a>
+                    <a href="#policy" class="hover:text-brand-400 transition">প্রাইভেসি পলিসি (Privacy Policy)</a>
+					<a href="#terms" class="hover:text-brand-400 transition">টার্মস অ্যান্ড কন্ডিশনস (Terms and Conditions)</a>
+					<a href="#guideline" class="hover:text-brand-400 transition">গাইডলাইন (Guidelines)</a>
                 </div>
             </div>
             <div>
-                <h4 class="text-white font-bold mb-4">প্রয়োজনীয় লিংক</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="#home" class="hover:text-red-500 transition"><i class="fa-solid fa-angle-right mr-2 text-red-600"></i>ডোনার খুঁজুন</a></li>
-                    <li><a href="#about" class="hover:text-red-500 transition"><i class="fa-solid fa-angle-right mr-2 text-red-600"></i>আমাদের সম্পর্কে</a></li>
-                    <li><a href="#faq" class="hover:text-red-500 transition"><i class="fa-solid fa-angle-right mr-2 text-red-600"></i>সাধারণ প্রশ্ন (FAQ)</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-4">আইনি বিষয়াবলী</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="#privacy" class="hover:text-red-500 transition"><i class="fa-solid fa-angle-right mr-2 text-red-600"></i>প্রাইভেসি পলিসি</a></li>
-                    <li><a href="#terms" class="hover:text-red-500 transition"><i class="fa-solid fa-angle-right mr-2 text-red-600"></i>শর্তাবলী ও গাইডলাইন</a></li>
-                </ul>
+                <h4 class="text-white font-semibold mb-2">যোগাযোগ</h4>
+                <p class="text-xs"><i class="fa-solid fa-envelope mr-1"></i> co.terminal24@gmail.com</p>
+                <div class="mt-3 flex space-x-3">
+                   <!-- <a href="#" class="text-gray-400 hover:text-white"><i class="fa-brands fa-facebook text-lg"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fa-brands fa-whatsapp text-lg"></i></a> -->
+                </div>
             </div>
         </div>
-        <div class="text-center text-xs text-gray-500 mt-12 border-t border-gray-800 pt-6">
-            &copy; <span id="year"></span> Hitoishi. All Rights Reserved. Developed for Bangladesh.
+        <div class="text-center text-xs text-gray-500 mt-6 border-t border-gray-800 pt-4">
+            &copy; 2026 হিতৈষী. All rights reserved.
         </div>
     </footer>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- Scripts -->
     <script>
         // ==========================================
-        // CONFIGURATION & STATE
+        // CONFIGURATION (CHANGE THIS TO YOUR WEB APP URL)
         // ==========================================
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyCx5erW1E_13Gr9D-baB-62Trhk3Z2a8BW75eW6vKRqziV0CJ_QJ_X2tOVBmxjX_66/exec'; // <-- এখানে আপনার Web App URL দিন
-        let divisionsData = [];
-        let districtsData = [];
+        const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzpXRNpdBTYMTZZ5WzyyOvqVPWXyoO0SADR1Rx_1uAIev7kACavraJH-N_pUH-Xs9cu/exec';
+        
+        // ==========================================
+        // STATE MANAGEMENT
+        // ==========================================
         let currentUser = JSON.parse(localStorage.getItem('hitoishi_user')) || null;
-        let tempRegData = null;
-
-        document.getElementById('year').textContent = new Date().getFullYear();
+        let geoData = { divisions: [], districts: [] };
+        let tempRegEmail = ''; // For OTP flow
+        let currentViewedDonor = null;
 
         // ==========================================
-        // UI & ROUTING LOGIC
+        // UI & ROUTING LOGIC (SPA)
         // ==========================================
-        function showLoader() { document.getElementById('loader').style.display = 'flex'; }
-        function hideLoader() { document.getElementById('loader').style.display = 'none'; }
-
-        function toggleMenu() {
-            const menu = document.getElementById('mobile-menu');
-            const backdrop = document.getElementById('menu-backdrop');
-            
-            if (menu.classList.contains('menu-hidden')) {
-                menu.classList.remove('menu-hidden');
-                menu.classList.add('menu-visible');
-                backdrop.classList.remove('hidden');
-                setTimeout(() => backdrop.classList.remove('opacity-0'), 10);
-            } else {
-                menu.classList.add('menu-hidden');
-                menu.classList.remove('menu-visible');
-                backdrop.classList.add('opacity-0');
-                setTimeout(() => backdrop.classList.add('hidden'), 300);
-            }
+        function showToast(msg, type = 'normal') {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.className = `fixed top-5 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-full text-sm shadow-xl z-50 transition-all duration-300 opacity-100 translate-y-0 ${type === 'error' ? 'bg-red-600' : 'bg-gray-800'} text-white`;
+            setTimeout(() => {
+                toast.classList.replace('opacity-100', 'opacity-0');
+                toast.classList.replace('translate-y-0', 'translate-y-[-20px]');
+            }, 3000);
         }
 
-        function handleRouting() {
-            const hash = window.location.hash || '#home';
-            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
-            
-            const targetSection = document.querySelector(hash);
-            if(targetSection) {
-                targetSection.classList.add('active');
-            } else {
-                document.getElementById('home').classList.add('active'); // fallback
-            }
-            
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            updateAuthUI();
-
-            // Setup specific page data
-            if(hash === '#dashboard' && currentUser) {
-                setupDashboard();
-            } else if (hash === '#dashboard' && !currentUser) {
-                window.location.hash = '#login';
-            }
+        function toggleLoader(show) {
+            document.getElementById('global-loader').style.display = show ? 'flex' : 'none';
         }
 
-        window.addEventListener('hashchange', handleRouting);
+        function navigateTo(hashPath) {
+            window.location.hash = hashPath;
+        }
 
-        function updateAuthUI() {
-            const deskAuth = document.getElementById('desktop-auth-buttons');
-            const deskUser = document.getElementById('desktop-user-menu');
-            const mobAuth = document.getElementById('mobile-auth-buttons');
-            const mobUser = document.getElementById('mobile-user-menu');
+        function handleRoute() {
+            let hash = window.location.hash.substring(1) || 'home';
+            
+            // Auth Guards
+            if(hash === 'profile' && !currentUser) return navigateTo('login');
+            if((hash === 'login' || hash === 'register') && currentUser) return navigateTo('profile');
 
-            if (currentUser) {
-                deskAuth.classList.add('hidden');
-                deskUser.classList.remove('hidden');
-                document.getElementById('nav-user-name').textContent = currentUser.name;
-                document.getElementById('nav-profile-pic').src = currentUser.profilePic || 'https://via.placeholder.com/150';
-                
-                mobAuth.classList.add('hidden');
-                mobUser.classList.remove('hidden');
+            // Hide all sections, show active
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            const activeSec = document.getElementById(hash);
+            if(activeSec) activeSec.classList.add('active');
+            else document.getElementById('home').classList.add('active');
+
+            // Close mobile menu if open
+            closeMobileMenu();
+            updateNavUI();
+
+            // Section Specific triggers
+            if(hash === 'profile') loadProfileData();
+            if(hash === 'donors') loadFunds();
+            window.scrollTo(0,0);
+        }
+
+        window.addEventListener('hashchange', handleRoute);
+
+        // ==========================================
+        // MOBILE MENU LOGIC
+        // ==========================================
+        const menuBtn = document.getElementById('menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuOverlay = document.getElementById('menu-overlay');
+
+        function openMobileMenu() {
+            mobileMenu.classList.add('open');
+            menuOverlay.classList.add('open');
+        }
+
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('open');
+            menuOverlay.classList.remove('open');
+        }
+
+        menuBtn.addEventListener('click', openMobileMenu);
+        closeMenuBtn.addEventListener('click', closeMobileMenu);
+        menuOverlay.addEventListener('click', closeMobileMenu);
+        
+        // ==========================================
+        // AUTH UI UPDATES
+        // ==========================================
+        function updateNavUI() {
+            if(currentUser) {
+                document.getElementById('desktop-auth-buttons').classList.add('hidden');
+                document.getElementById('desktop-user-menu').classList.remove('hidden');
+                document.getElementById('mobile-auth-buttons').classList.add('hidden');
+                document.getElementById('mobile-user-menu').classList.remove('hidden');
+                document.getElementById('mobile-user-menu').classList.add('flex');
             } else {
-                deskAuth.classList.remove('hidden');
-                deskUser.classList.add('hidden');
-                
-                mobAuth.classList.remove('hidden');
-                mobUser.classList.add('hidden');
+                document.getElementById('desktop-auth-buttons').classList.remove('hidden');
+                document.getElementById('desktop-user-menu').classList.add('hidden');
+                document.getElementById('mobile-auth-buttons').classList.remove('hidden');
+                document.getElementById('mobile-user-menu').classList.add('hidden');
+                document.getElementById('mobile-user-menu').classList.remove('flex');
             }
         }
 
         function logout() {
             localStorage.removeItem('hitoishi_user');
             currentUser = null;
-            window.location.hash = '#home';
-            alert('সফলভাবে লগআউট হয়েছেন।');
+            showToast("লগআউট সফল হয়েছে");
+            navigateTo('home');
         }
 
         // ==========================================
-        // DATA FETCHING & FORM SETUP
+        // DATA LOADING & JSON HANDLING
         // ==========================================
         async function loadGeoData() {
-            showLoader();
             try {
-                // Assuming json files are in the same directory. 
-                // In production, ensure these are hosted accessible via URL.
-                const resDiv = await fetch('divisions.json');
-                const divJson = await resDiv.json();
-                divisionsData = divJson[2].data; // Based on provided structure
+                // Fetching from local JSON files
+                const divRes = await fetch('divisions.json');
+                const distRes = await fetch('districts.json');
+                
+                const divData = await divRes.json();
+                const distData = await distRes.json();
 
-                const resDist = await fetch('districts.json');
-                const distJson = await resDist.json();
-                districtsData = distJson[2].data; // Based on provided structure
+                // Parsing the specific structure provided in prompt
+                geoData.divisions = divData[2].data; 
+                geoData.districts = distData[2].data;
 
-                populateDivisions('searchDivision');
-                populateDivisions('regDivision');
-            } catch (error) {
-                console.error("Geo Data Load Error: ", error);
-                // Fallback for local testing if fetch fails due to CORS
-                alert('ডেটা লোড করতে সমস্যা হচ্ছে। সার্ভার থেকে ফাইল রান করুন।');
+                // Populate Division Dropdowns
+                const searchDiv = document.getElementById('search-div');
+                const regDiv = document.getElementById('reg-div');
+                let divOptions = '<option value="">বিভাগ নির্বাচন করুন</option>';
+                
+                geoData.divisions.forEach(d => {
+                    divOptions += `<option value="${d.id}">${d.bn_name}</option>`;
+                });
+
+                searchDiv.innerHTML = divOptions;
+                regDiv.innerHTML = divOptions;
+
+            } catch(e) {
+                console.error("Geo Data load failed:", e);
+                showToast("ঠিকানা লোড করতে সমস্যা হচ্ছে।", "error");
             }
-            hideLoader();
         }
 
-        function populateDivisions(selectId) {
-            const select = document.getElementById(selectId);
-            divisionsData.forEach(div => {
-                select.innerHTML += `<option value="${div.id}">${div.bn_name} (${div.name})</option>`;
+        function populateDistricts(divElementId, distElementId) {
+            const divId = document.getElementById(divElementId).value;
+            const distSelect = document.getElementById(distElementId);
+            distSelect.innerHTML = '<option value="">জেলা নির্বাচন করুন</option>';
+            
+            if(!divId) return;
+
+            geoData.districts.forEach(d => {
+                if(d.division_id === divId) {
+                    distSelect.innerHTML += `<option value="${d.bn_name}">${d.bn_name}</option>`;
+                }
             });
         }
 
-        function handleDivisionChange(divSelectId, distSelectId) {
-            const divId = document.getElementById(divSelectId).value;
-            const distSelect = document.getElementById(distSelectId);
-            distSelect.innerHTML = '<option value="">জেলা নির্বাচন করুন</option>';
-            
-            if (divId) {
-                distSelect.disabled = false;
-                const filtered = districtsData.filter(d => d.division_id === divId);
-                filtered.forEach(dist => {
-                    distSelect.innerHTML += `<option value="${dist.id}">${dist.bn_name} (${dist.name})</option>`;
-                });
-            } else {
-                distSelect.disabled = true;
-            }
+        function populateSearchDistricts() { populateDistricts('search-div', 'search-dist'); }
+        function populateRegDistricts() { populateDistricts('reg-div', 'reg-dist'); }
+
+        // Get Division Name by ID
+        function getDivName(id) {
+            const div = geoData.divisions.find(d => d.id === id);
+            return div ? div.bn_name : '';
         }
 
-        document.getElementById('searchDivision').addEventListener('change', () => handleDivisionChange('searchDivision', 'searchDistrict'));
-        document.getElementById('regDivision').addEventListener('change', () => handleDivisionChange('regDivision', 'regDistrict'));
+        // Image compression before base64 (to prevent sheet crash)
+        let compressedImageBase64 = '';
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
 
-        // Phone number +880 restriction
-        function enforcePhonePrefix(e) {
-            if (!e.target.value.startsWith('+880')) {
-                e.target.value = '+880';
-            }
-        }
-        document.getElementById('regPhone1').addEventListener('input', enforcePhonePrefix);
-        document.getElementById('regPhone2').addEventListener('input', enforcePhonePrefix);
-
-        // Image to Base64 with Resizing (For Apps Script limits)
-        function previewImage(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    // Resize image using Canvas
-                    const img = new Image();
-                    img.onload = function() {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        const maxW = 300; // Small size for fast DB storage
-                        const scale = maxW / img.width;
-                        canvas.width = maxW;
-                        canvas.height = img.height * scale;
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        
-                        const base64 = canvas.toDataURL('image/jpeg', 0.8);
-                        document.getElementById('imgPreview').src = base64;
-                        document.getElementById('imgPreview').classList.remove('hidden');
-                        document.getElementById('imgIcon').classList.add('hidden');
-                        document.getElementById('regPicBase64').value = base64;
-                    }
-                    img.src = e.target.result;
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function(e) {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 200; // Small size for sheet storage
+                    const scaleSize = MAX_WIDTH / img.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = img.height * scaleSize;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    
+                    compressedImageBase64 = canvas.toDataURL('image/jpeg', 0.6).split(',')[1];
+                    
+                    document.getElementById('reg-pic-preview').src = canvas.toDataURL('image/jpeg', 0.6);
+                    document.getElementById('reg-pic-preview').classList.remove('hidden');
+                    document.getElementById('reg-pic-icon').classList.add('hidden');
                 }
-                reader.readAsDataURL(input.files[0]);
             }
         }
 
         // ==========================================
-        // API CALLS (FETCH)
+        // API CALL WRAPPER
         // ==========================================
-        
-        // 1. REGISTRATION & OTP
-        document.getElementById('regForm').addEventListener('submit', async (e) => {
+        async function apiCall(payload) {
+            if(GAS_WEB_APP_URL.includes('YOUR_GOOGLE')) {
+                showToast("Developer: Please set the GAS_WEB_APP_URL in JS", "error");
+                return null;
+            }
+            toggleLoader(true);
+            try {
+                const response = await fetch(GAS_WEB_APP_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+                toggleLoader(false);
+                return data;
+            } catch(e) {
+                toggleLoader(false);
+                showToast("সার্ভার এরর! আবার চেষ্টা করুন।", "error");
+                console.error(e);
+                return null;
+            }
+        }
+
+        // ==========================================
+        // FORM SUBMISSIONS
+        // ==========================================
+
+        // 1. Registration
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            const data = {
-                action: 'sendOTP',
-                name: document.getElementById('regName').value,
-                email: document.getElementById('regEmail').value,
-                password: document.getElementById('regPassword').value, // In production, hash this.
-                bloodGroup: document.getElementById('regBlood').value,
-                gender: document.getElementById('regGender').value,
-                phone1: document.getElementById('regPhone1').value,
-                phone2: document.getElementById('regPhone2').value,
-                division: document.getElementById('regDivision').options[document.getElementById('regDivision').selectedIndex].text,
-                district: document.getElementById('regDistrict').options[document.getElementById('regDistrict').selectedIndex].text,
-                detailedAddress: document.getElementById('regAddress').value,
-                profilePic: document.getElementById('regPicBase64').value,
-                smoker: document.querySelector('input[name="regSmoker"]:checked').value,
-                hasDisease: document.querySelector('input[name="regDisease"]:checked').value
+            if(!compressedImageBase64) return showToast("প্রোফাইল ছবি দিন", "error");
+            if(!document.getElementById('reg-consent').checked) return showToast("সম্মতি প্রদান করতে হবে", "error");
+
+            const payload = {
+                action: 'register',
+                name: document.getElementById('reg-name').value,
+                email: document.getElementById('reg-email').value,
+                password: document.getElementById('reg-pass').value,
+                bloodGroup: document.getElementById('reg-bg').value,
+                gender: document.getElementById('reg-gender').value,
+                phone1: '+880' + document.getElementById('reg-phone1').value,
+                phone2: document.getElementById('reg-phone2').value ? '+880' + document.getElementById('reg-phone2').value : '',
+                division: getDivName(document.getElementById('reg-div').value),
+                district: document.getElementById('reg-dist').value,
+                address: document.getElementById('reg-address').value,
+                profilePic: compressedImageBase64,
+                smoker: document.querySelector('input[name="reg-smoker"]:checked').value,
+                medicalCondition: document.querySelector('input[name="reg-medical"]:checked').value
             };
 
-            showLoader();
-            try {
-                const res = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(data)
-                });
-                const result = await res.json();
-                
-                if(result.status === 'success') {
-                    tempRegData = data.email;
-                    document.getElementById('regForm').classList.add('hidden');
-                    document.getElementById('otpSection').classList.remove('hidden');
-                    alert(result.message);
-                } else {
-                    alert(result.message);
-                }
-            } catch (err) { alert('Network Error!'); }
-            hideLoader();
+            const res = await apiCall(payload);
+            if(res && res.status === 'success') {
+                tempRegEmail = res.email;
+                document.getElementById('otp-email-text').innerText = `${res.email} এ কোড পাঠানো হয়েছে।`;
+                navigateTo('otp-verify');
+                showToast(res.message);
+            } else if (res && res.status === 'warning') {
+                 showToast(res.message, 'error'); // Show long warning
+                 setTimeout(() => navigateTo('home'), 4000);
+            } else if(res) {
+                showToast(res.message, "error");
+            }
         });
 
-        async function verifyOTP() {
-            const otp = document.getElementById('otpInput').value;
-            if(otp.length !== 6) return alert('সঠিক ৬-ডিজিটের কোড দিন।');
+        // 2. OTP Verification
+        document.getElementById('otp-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const payload = {
+                action: 'verifyOTP',
+                email: tempRegEmail,
+                otp: document.getElementById('otp-code').value
+            };
+            const res = await apiCall(payload);
+            if(res && res.status === 'success') {
+                currentUser = res.user;
+                localStorage.setItem('hitoishi_user', JSON.stringify(currentUser));
+                showToast("অ্যাকাউন্ট তৈরি সফল! অটো লগইন হয়েছে।");
+                navigateTo('profile');
+            } else if(res) {
+                showToast(res.message, "error");
+            }
+        });
 
-            showLoader();
-            try {
-                const res = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'verifyOTP', email: tempRegData, otp: otp })
+        // 3. Login
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const payload = {
+                action: 'login',
+                email: document.getElementById('login-email').value,
+                password: document.getElementById('login-pass').value
+            };
+            const res = await apiCall(payload);
+            if(res && res.status === 'success') {
+                currentUser = res.user;
+                localStorage.setItem('hitoishi_user', JSON.stringify(currentUser));
+                showToast("লগইন সফল হয়েছে");
+                navigateTo('profile');
+            } else if(res) {
+                showToast(res.message, "error");
+            }
+        });
+
+        // 4. Search
+        document.getElementById('search-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const bg = document.getElementById('search-bg').value;
+            const div = getDivName(document.getElementById('search-div').value);
+            const dist = document.getElementById('search-dist').value;
+
+            const res = await apiCall({ action: 'searchDonors', bloodGroup: bg, division: div, district: dist });
+            
+            const resultsDiv = document.getElementById('search-results');
+            const emptyDiv = document.getElementById('search-empty');
+            
+            if(res && res.status === 'success' && res.data.length > 0) {
+                emptyDiv.classList.add('hidden');
+                resultsDiv.classList.remove('hidden');
+                resultsDiv.innerHTML = '';
+
+                // Store in window for detail view
+                window.searchResultsData = res.data;
+
+                res.data.forEach((donor, index) => {
+                    let statusHtml = donor.eligible 
+                        ? `<span class="bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded font-bold"><i class="fa-solid fa-check"></i> প্রস্তুত</span>` 
+                        : `<span class="bg-red-100 text-red-700 text-[10px] px-2 py-0.5 rounded font-bold"><i class="fa-solid fa-clock"></i> দিতে পারবে না (অপেক্ষা: ${donor.waitDays} দিন)</span>`;
+                    
+                    let picSrc = donor.profilePic ? `data:image/jpeg;base64,${donor.profilePic}` : 'https://via.placeholder.com/150?text=No+Pic';
+
+                    resultsDiv.innerHTML += `
+                        <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm flex items-center gap-3">
+                            <img src="${picSrc}" class="w-14 h-14 rounded-full object-cover border border-gray-200">
+                            <div class="flex-1">
+                                <h4 class="font-bold text-sm truncate">${donor.name}</h4>
+                                <p class="text-[10px] text-gray-500"><i class="fa-solid fa-location-dot"></i> ${donor.district}, ${donor.division}</p>
+                                <div class="mt-1 flex justify-between items-center">
+                                    <span class="font-bold text-brand-600 text-xs">${donor.bloodGroup}</span>
+                                    ${statusHtml}
+                                </div>
+                            </div>
+                            <button onclick="viewDonor(${index})" class="bg-gray-100 hover:bg-gray-200 text-gray-700 w-8 h-8 rounded-full flex items-center justify-center transition"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+                        </div>
+                    `;
                 });
-                const result = await res.json();
-                
-                if(result.status === 'success' || result.status === 'success_banned') {
-                    alert(result.message);
-                    window.location.hash = '#login';
-                    // Reset Form
-                    document.getElementById('regForm').reset();
-                    document.getElementById('regForm').classList.remove('hidden');
-                    document.getElementById('otpSection').classList.add('hidden');
-                } else {
-                    alert(result.message);
-                }
-            } catch (err) { alert('Network Error!'); }
-            hideLoader();
+            } else {
+                resultsDiv.classList.add('hidden');
+                emptyDiv.classList.remove('hidden');
+            }
+        });
+
+        // 5. View Donor Details (Public Profile)
+        function viewDonor(index) {
+            currentViewedDonor = window.searchResultsData[index];
+            const d = currentViewedDonor;
+            
+            document.getElementById('pub-pic').src = d.profilePic ? `data:image/jpeg;base64,${d.profilePic}` : '';
+            document.getElementById('pub-name').innerText = d.name;
+            document.getElementById('pub-bg').innerText = d.bloodGroup;
+            document.getElementById('pub-address').innerText = d.address + `, ${d.district}, ${d.division}`;
+            document.getElementById('pub-phone').innerText = d.phone1;
+            document.getElementById('pub-phone').href = 'tel:' + d.phone1;
+            document.getElementById('pub-phone2').innerText = d.phone2;
+            document.getElementById('pub-phone2').href = 'tel:' + d.phone2;
+
+            const elBadge = document.getElementById('pub-eligibility');
+            if(d.eligible) {
+                elBadge.className = 'text-xs inline-block px-3 py-1 rounded-full font-medium mb-4 bg-green-100 text-green-700';
+                elBadge.innerHTML = '<i class="fa-solid fa-check-circle"></i> রক্তদানে প্রস্তুত';
+            } else {
+                elBadge.className = 'text-xs inline-block px-3 py-1 rounded-full font-medium mb-4 bg-red-100 text-red-700';
+                elBadge.innerHTML = `<i class="fa-solid fa-clock"></i> রক্ত দিতে পারবেন না (অপেক্ষা: ${d.waitDays} দিন)`;
+            }
+
+            // Render Reviews
+            const revDiv = document.getElementById('pub-reviews-list');
+            revDiv.innerHTML = '';
+            if(d.reviews && d.reviews.length > 0) {
+                d.reviews.forEach(r => {
+                    revDiv.innerHTML += `<div class="bg-gray-50 p-2 rounded"><b class="text-gray-800">${r.name}:</b> <span class="text-gray-600">${r.comment}</span></div>`;
+                });
+            } else {
+                revDiv.innerHTML = '<p class="text-gray-400">কোনো মতামত নেই।</p>';
+            }
+
+            navigateTo('public-profile');
         }
 
-        // 2. LOGIN
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            showLoader();
-            try {
-                const res = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        action: 'login',
-                        email: document.getElementById('loginEmail').value,
-                        password: document.getElementById('loginPassword').value
-                    })
-                });
-                const result = await res.json();
-                
-                if(result.status === 'success') {
-                    currentUser = result.user;
-                    localStorage.setItem('hitoishi_user', JSON.stringify(currentUser));
-                    document.getElementById('loginForm').reset();
-                    window.location.hash = '#dashboard';
+        // Submit Review
+        async function submitReview() {
+            if(!currentViewedDonor) return;
+            const name = document.getElementById('rev-name').value;
+            const comment = document.getElementById('rev-comment').value;
+            if(!name || !comment) return showToast("নাম এবং মতামত দিন", "error");
+
+            const res = await apiCall({ action: 'submitReview', donorId: currentViewedDonor.userId, reviewerName: name, comment: comment });
+            if(res && res.status === 'success') {
+                showToast("মতামত যুক্ত হয়েছে।");
+                document.getElementById('rev-name').value = '';
+                document.getElementById('rev-comment').value = '';
+                // Simple local update for UX
+                document.getElementById('pub-reviews-list').innerHTML += `<div class="bg-gray-50 p-2 rounded border-l-2 border-brand-500"><b class="text-gray-800">${name}:</b> <span class="text-gray-600">${comment}</span></div>`;
+            }
+        }
+
+        // 6. Profile Data (Dashboard)
+        async function loadProfileData() {
+            if(!currentUser) return;
+            document.getElementById('prof-name').innerText = currentUser.name;
+            document.getElementById('prof-bg').innerText = currentUser.bloodGroup;
+            if(currentUser.profilePic) document.getElementById('prof-pic').src = `data:image/jpeg;base64,${currentUser.profilePic}`;
+
+            const res = await apiCall({ action: 'getProfileData', userId: currentUser.userId });
+            const histDiv = document.getElementById('prof-history');
+            if(res && res.status === 'success') {
+                if(res.history.length === 0) {
+                    histDiv.innerHTML = '<p class="text-xs text-gray-500">কোনো রেকর্ড নেই।</p>';
                 } else {
-                    alert(result.message);
-                }
-            } catch (err) { alert('Network Error!'); }
-            hideLoader();
-        });
-
-        // 3. DASHBOARD LOGIC
-        function setupDashboard() {
-            document.getElementById('dashName').textContent = currentUser.name;
-            document.getElementById('dashBlood').textContent = currentUser.bloodGroup;
-            document.getElementById('dashGender').textContent = currentUser.gender === 'Male' ? 'পুরুষ' : 'মহিলা';
-            document.getElementById('dashPic').src = currentUser.profilePic || 'https://via.placeholder.com/150';
-
-            // Eligibility Logic
-            const elDiv = document.getElementById('dashEligibility');
-            if(!currentUser.lastDonation) {
-                elDiv.className = 'px-4 py-2 rounded-lg text-sm font-bold text-center border bg-green-50 border-green-200 text-green-700';
-                elDiv.innerHTML = '<i class="fa-solid fa-check-circle mr-1"></i> আপনি রক্ত দিতে প্রস্তুত!';
-            } else {
-                const lastDate = new Date(currentUser.lastDonation);
-                const daysReq = currentUser.gender === 'Male' ? 90 : 120;
-                const nextDate = new Date(lastDate.getTime() + (daysReq * 24 * 60 * 60 * 1000));
-                const today = new Date();
-
-                if(today >= nextDate) {
-                    elDiv.className = 'px-4 py-2 rounded-lg text-sm font-bold text-center border bg-green-50 border-green-200 text-green-700';
-                    elDiv.innerHTML = '<i class="fa-solid fa-check-circle mr-1"></i> আপনি রক্ত দিতে প্রস্তুত!';
-                } else {
-                    const diffDays = Math.ceil(Math.abs(nextDate - today) / (1000 * 60 * 60 * 24));
-                    elDiv.className = 'px-4 py-2 rounded-lg text-sm font-bold text-center border bg-red-50 border-red-200 text-red-700';
-                    elDiv.innerHTML = `<i class="fa-solid fa-clock mr-1"></i> এখনই পারবেন না। আরও ${diffDays} দিন পর পারবেন।`;
+                    histDiv.innerHTML = res.history.map(h => `
+                        <div class="border-l-2 border-brand-500 pl-3 py-1">
+                            <p class="text-xs font-bold">${new Date(h.date).toLocaleDateString('bn-BD')}</p>
+                            <p class="text-xs text-gray-600">${h.hospital}</p>
+                        </div>
+                    `).join('');
                 }
             }
         }
 
-        document.getElementById('donationForm').addEventListener('submit', async (e) => {
+        // Log Donation
+        document.getElementById('donation-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            showLoader();
-            try {
-                const res = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        action: 'addDonation',
-                        userId: currentUser.id,
-                        date: document.getElementById('donDate').value,
-                        hospital: document.getElementById('donHospital').value,
-                        details: document.getElementById('donNote').value
-                    })
-                });
-                const result = await res.json();
-                alert(result.message);
-                if(result.status === 'success') {
-                    currentUser.lastDonation = document.getElementById('donDate').value;
-                    localStorage.setItem('hitoishi_user', JSON.stringify(currentUser));
-                    setupDashboard();
-                    document.getElementById('donationForm').reset();
-                }
-            } catch (err) { alert('Network Error!'); }
-            hideLoader();
+            const date = document.getElementById('don-date').value;
+            const hosp = document.getElementById('don-hosp').value;
+            
+            const res = await apiCall({ action: 'logDonation', userId: currentUser.userId, date: date, hospital: hosp, note: '' });
+            if(res && res.status === 'success') {
+                showToast("সংরক্ষণ করা হয়েছে।");
+                document.getElementById('donation-form').reset();
+                loadProfileData(); // Reload history
+            }
         });
 
-        // 4. SEARCH & PROFILE VIEW
-        document.getElementById('searchForm').addEventListener('submit', async (e) => {
+        // 7. Site Funding
+        document.getElementById('fund-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            const bGroup = document.getElementById('searchBloodGroup').value;
-            const divId = document.getElementById('searchDivision').value;
-            const distId = document.getElementById('searchDistrict').value;
-            
-            const divText = divId ? document.getElementById('searchDivision').options[document.getElementById('searchDivision').selectedIndex].text : '';
-            const distText = distId ? document.getElementById('searchDistrict').options[document.getElementById('searchDistrict').selectedIndex].text : '';
-
-            showLoader();
-            try {
-                const res = await fetch(`${SCRIPT_URL}?action=getDonors&bloodGroup=${encodeURIComponent(bGroup)}&division=${encodeURIComponent(divText)}&district=${encodeURIComponent(distText)}`);
-                const result = await res.json();
-                
-                const resArea = document.getElementById('searchResultsArea');
-                const grid = document.getElementById('resultsGrid');
-                const count = document.getElementById('resultCount');
-                
-                resArea.classList.remove('hidden');
-                grid.innerHTML = '';
-                
-                if(result.status === 'success' && result.data.length > 0) {
-                    count.textContent = result.data.length + ' জন';
-                    result.data.forEach(donor => {
-                        // Check eligibility for search cards
-                        let isEligible = true;
-                        if(donor.lastDonation) {
-                            const lastDate = new Date(donor.lastDonation);
-                            const daysReq = donor.gender === 'Male' ? 90 : 120;
-                            const nextDate = new Date(lastDate.getTime() + (daysReq * 24 * 60 * 60 * 1000));
-                            if(new Date() < nextDate) isEligible = false;
-                        }
-
-                        const badge = isEligible 
-                            ? `<span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-bold border border-green-200"><i class="fa-solid fa-check"></i> প্রস্তুত</span>`
-                            : `<span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full font-bold border border-red-200"><i class="fa-solid fa-xmark"></i> এখনই পারবেন না</span>`;
-
-                        grid.innerHTML += `
-                            <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition">
-                                <div class="flex items-center gap-4 mb-4">
-                                    <img src="${donor.profilePic || 'https://via.placeholder.com/150'}" class="w-14 h-14 rounded-full object-cover border-2 border-red-100">
-                                    <div>
-                                        <h4 class="font-bold text-lg text-gray-900 leading-tight">${donor.name}</h4>
-                                        <p class="text-sm text-gray-500">${donor.district}</p>
-                                    </div>
-                                    <div class="ml-auto text-xl font-bold text-red-600 bg-red-50 w-10 h-10 flex items-center justify-center rounded-lg border border-red-100">${donor.bloodGroup}</div>
-                                </div>
-                                <div class="flex justify-between items-center mt-4">
-                                    ${badge}
-                                    <button onclick="viewProfile('${donor.id}')" class="text-red-600 font-medium text-sm hover:underline">বিস্তারিত দেখুন <i class="fa-solid fa-arrow-right text-xs"></i></button>
-                                </div>
-                            </div>
-                        `;
-                    });
-                } else {
-                    count.textContent = '0';
-                    grid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-10 bg-gray-50 rounded-xl border border-dashed border-gray-300">কোনো ডোনার পাওয়া যায়নি। অন্য এলাকা বা গ্রুপ দিয়ে চেষ্টা করুন।</div>';
-                }
-            } catch (err) { alert('Network Error!'); }
-            hideLoader();
+            const payload = {
+                action: 'submitFund',
+                name: document.getElementById('fund-name').value,
+                phone: document.getElementById('fund-phone').value,
+                trxId: document.getElementById('fund-trx').value,
+                isAnonymous: document.getElementById('fund-anon').checked
+            };
+            const res = await apiCall(payload);
+            if(res && res.status === 'success') {
+                showToast(res.message);
+                document.getElementById('fund-form').reset();
+            }
         });
 
-        async function viewProfile(id) {
-            showLoader();
+        async function loadFunds() {
+            // Using direct fetch for GET to avoid loader block if needed, but apiCall is fine.
+            const listDiv = document.getElementById('fund-list');
             try {
-                const res = await fetch(`${SCRIPT_URL}?action=getDonorDetails&id=${id}`);
-                const result = await res.json();
-                
-                if(result.status === 'success') {
-                    const u = result.user;
-                    let html = `
-                        <div class="flex flex-col md:flex-row gap-8 items-start">
-                            <img src="${u.profilePic || 'https://via.placeholder.com/150'}" class="w-32 h-32 rounded-2xl object-cover shadow-md border-4 border-white">
-                            <div class="flex-1">
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <h2 class="text-3xl font-bold text-gray-900 mb-1">${u.name}</h2>
-                                        <p class="text-gray-500"><i class="fa-solid fa-location-dot mr-1"></i> ${u.address}</p>
-                                    </div>
-                                    <div class="text-3xl font-bold text-red-600 bg-red-50 px-4 py-2 rounded-xl border border-red-100 shadow-sm">${u.bloodGroup}</div>
-                                </div>
-                                
-                                <div class="grid grid-cols-2 gap-4 mt-6">
-                                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
-                                        <p class="text-xs text-gray-500 mb-1">ফোন নাম্বার (১)</p>
-                                        <p class="font-bold text-gray-800"><a href="tel:${u.phone1}"><i class="fa-solid fa-phone text-red-600 mr-1"></i> ${u.phone1}</a></p>
-                                    </div>
-                                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
-                                        <p class="text-xs text-gray-500 mb-1">ফোন নাম্বার (২)</p>
-                                        <p class="font-bold text-gray-800">${u.phone2 ? `<a href="tel:${u.phone2}"><i class="fa-solid fa-phone text-red-600 mr-1"></i> ${u.phone2}</a>` : 'দেওয়া নেই'}</p>
-                                    </div>
-                                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
-                                        <p class="text-xs text-gray-500 mb-1">সর্বমোট রক্তদান</p>
-                                        <p class="font-bold text-gray-800"><i class="fa-solid fa-hand-holding-droplet text-red-600 mr-1"></i> ${u.total || 0} বার</p>
-                                    </div>
-                                    <div class="bg-gray-50 p-3 rounded-lg border border-gray-100">
-                                        <p class="text-xs text-gray-500 mb-1">শেষ রক্তদানের তারিখ</p>
-                                        <p class="font-bold text-gray-800">${u.lastDonation ? new Date(u.lastDonation).toLocaleDateString() : 'এখনো দেননি'}</p>
-                                    </div>
-                                </div>
+                const res = await fetch(GAS_WEB_APP_URL + '?action=getFunds').then(r => r.json());
+                if(res && res.status === 'success') {
+                    if(res.data.length === 0) {
+                        listDiv.innerHTML = '<p class="text-xs text-gray-500">এখনো কোনো ডোনেশন তালিকাভুক্ত হয়নি।</p>';
+                    } else {
+                        listDiv.innerHTML = res.data.map(f => `
+                            <div class="flex items-center justify-between bg-gray-50 p-2 rounded border border-gray-100">
+                                <span class="text-sm font-semibold text-gray-700"><i class="fa-solid fa-user-check text-brand-500 mr-2"></i> ${f.name}</span>
+                                <span class="text-[10px] text-gray-400">${new Date(f.date).toLocaleDateString()}</span>
                             </div>
-                        </div>
-
-                        <!-- Feedback Section -->
-                        <div class="mt-10 pt-8 border-t border-gray-100">
-                            <h3 class="text-xl font-bold mb-4">মতামত (Reviews)</h3>
-                            
-                            <!-- Add Review Form -->
-                            <form onsubmit="submitReview(event, '${id}')" class="mb-6 bg-blue-50 p-4 rounded-xl border border-blue-100">
-                                <p class="text-sm text-blue-800 font-medium mb-3">এই ডোনারের থেকে রক্ত নিয়ে থাকলে আপনার মতামত জানান:</p>
-                                <input type="text" id="revName" placeholder="আপনার নাম" class="w-full p-2 mb-2 border rounded" required>
-                                <textarea id="revComment" placeholder="মতামত লিখুন..." class="w-full p-2 mb-2 border rounded" required></textarea>
-                                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded text-sm font-bold hover:bg-blue-700">মতামত জমা দিন</button>
-                            </form>
-
-                            <div class="space-y-4">
-                                ${result.reviews.length > 0 ? result.reviews.map(r => `
-                                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
-                                        <div class="flex justify-between mb-2">
-                                            <span class="font-bold text-gray-800"><i class="fa-solid fa-user-circle text-gray-400 mr-1"></i> ${r.reviewer}</span>
-                                            <span class="text-xs text-gray-500">${new Date(r.date).toLocaleDateString()}</span>
-                                        </div>
-                                        <p class="text-gray-700 text-sm">"${r.comment}"</p>
-                                    </div>
-                                `).join('') : '<p class="text-gray-500 text-sm italic">এখনো কোনো মতামত নেই।</p>'}
-                            </div>
-                        </div>
-                    `;
-                    document.getElementById('profileContent').innerHTML = html;
-                    window.location.hash = '#donor-profile';
+                        `).join('');
+                    }
                 }
-            } catch (err) { alert('Network Error!'); }
-            hideLoader();
+            } catch(e) {
+                console.log("Could not load funds");
+            }
         }
 
-        async function submitReview(e, donorId) {
-            e.preventDefault();
-            const name = document.getElementById('revName').value;
-            const comment = document.getElementById('revComment').value;
-            
-            showLoader();
-            try {
-                const res = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: 'addReview', donorId: donorId, reviewerName: name, comment: comment })
-                });
-                const result = await res.json();
-                alert(result.message);
-                if(result.status === 'success') {
-                    viewProfile(donorId); // Refresh profile
-                }
-            } catch (err) { alert('Network Error!'); }
-            hideLoader();
-        }
 
         // ==========================================
         // INITIALIZATION
         // ==========================================
         window.onload = () => {
-            handleRouting();
             loadGeoData();
+            handleRoute(); // Process current hash
         };
 
     </script>
